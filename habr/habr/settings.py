@@ -1,4 +1,3 @@
-Мне ПОХУЙ кто там что скажет.
 """
 Django settings for habr project.
 
