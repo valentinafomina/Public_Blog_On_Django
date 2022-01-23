@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <form method="post" id="FormOne">
+        <div>
+                {% csrf_token %}
+            <div>
+                    {{article_create_form}}
+            </div>
+            <div >
+                        <input type='submit' value="Отправить"/>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>
