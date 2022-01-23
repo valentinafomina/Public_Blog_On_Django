@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'adminapp',
     'moderation',
     'userprofile',
+    'articleapp',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +78,9 @@ WSGI_APPLICATION = 'habr.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'habr',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'CHARSET': 'utf8',
     }
 }
 
