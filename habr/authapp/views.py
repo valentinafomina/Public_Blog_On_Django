@@ -1,11 +1,11 @@
-from django.shortcuts import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.contrib import auth
+from django.shortcuts import HttpResponseRedirect, render
+from django.urls import reverse_lazy, reverse
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-
 from authapp.models import User
-from authapp.forms import UserRegisterForm, UserProfileForm
+from authapp.forms import UserRegisterForm, UserProfileForm, UserLoginForm
 
 
 # CRUD - Create Read Update Delete
@@ -50,3 +50,19 @@ class UserDeleteView(DeleteView):
         self.object.is_active = False
         self.object.save()
         return HttpResponseRedirect(success_url)
+
+
+def login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+    else:
+        form = UserLoginForm()
+    context = {'title': 'GeekShop - Авторизация', 'form': form}
+    return render(request, 'authapp/login.html', context)
