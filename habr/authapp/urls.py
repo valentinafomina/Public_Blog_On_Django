@@ -1,6 +1,6 @@
 from django.urls import path
+from .views import UserListView, UserCreateView, UserUpdateView, UserDeleteView
 
-from authapp.views import UserListView, UserCreateView, UserUpdateView, UserDeleteView
 app_name = 'adminapp'
 
 urlpatterns = [
