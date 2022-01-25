@@ -4,8 +4,8 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from authapp.models import User
-from authapp.forms import UserRegisterForm, UserProfileForm, UserLoginForm
+from .models import User
+from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
 
 
 # CRUD - Create Read Update Delete
