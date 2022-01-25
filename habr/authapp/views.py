@@ -11,7 +11,7 @@ from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
 # CRUD - Create Read Update Delete
 class UserListView(ListView):
     model = User
-    template_name = 'adthapp/admin-users-read.html'
+    template_name = 'authapp/admin-users-read.html'
 
     def dispatch(self, request, *args, **kwargs):
         return super(UserListView, self).dispatch(request, *args, **kwargs)
