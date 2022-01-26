@@ -14,7 +14,6 @@ class Article(models.Model):
 
     # Django based user, to be deleted upon creation of custom User model
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     title = models.CharField(max_length=200)
     article_text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
