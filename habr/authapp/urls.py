@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import UserListView, UserCreateView, UserUpdateView, UserDeleteView
+from .views import UserListView, UserCreateView, UserUpdateView, UserDeleteView, login
 
-app_name = 'adminapp'
+app_name = 'auth'
 
 urlpatterns = [
-    path('admin-users-read/', UserListView.as_view(), name='admin_users_read'),
-    path('admin-users-create/', UserCreateView.as_view(), name='admin_users_create'),
-    path('admin-users-update/<int:pk>/', UserUpdateView.as_view(), name='admin_users_update'),
-    path('admin-users-remove/<int:pk>/', UserDeleteView.as_view(), name='admin_users_remove'),
+    path('login/', login, name='login'),
+    path('users-read/', UserListView.as_view(), name='users_read'),
+    path('users-create/', UserCreateView.as_view(), name='users_create'),
+    path('users-update/', UserUpdateView.as_view(), name='users_update'),
+    path('users-remove/', UserDeleteView.as_view(), name='users_remove'),
 ]

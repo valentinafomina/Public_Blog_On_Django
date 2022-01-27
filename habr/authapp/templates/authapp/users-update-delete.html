@@ -1,9 +1,9 @@
-{% extends 'adminapp/base.html' %}
+{% extends 'authapp/base.html' %}
 
 {% block content %}
     <h1 class="mt-4">Редактирование пользователя | {{ user.username }}</h1>
     <div class="card-body">
-        <form action="{% url 'admin_staff:admin_users_update' user.id %}" method="post"
+        <form action="{% url 'auth:users_update' user.id %}" method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row">
@@ -48,7 +48,7 @@
         </form>
         <div class="row">
             <div class="col-lg-12" style="margin-top: 33px;">
-                <form action="{% url 'admin_staff:admin_users_remove' user.id %}" method="post">
+                <form action="{% url 'auth:users_remove' user.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="Удалить" class="btn btn-danger btn-block">
                 </form>
