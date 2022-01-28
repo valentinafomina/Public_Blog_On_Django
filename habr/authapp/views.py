@@ -1,3 +1,67 @@
-from django.shortcuts import render
+from django.contrib import auth
+from django.shortcuts import HttpResponseRedirect, render
+from django.urls import reverse_lazy, reverse
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-# Create your views here.
+from .models import User
+from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
+
+
+# CRUD - Create Read Update Delete
+class UserListView(ListView):
+    model = User
+    template_name = 'authapp/users-read.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserListView, self).dispatch(request, *args, **kwargs)
+
+
+class UserCreateView(CreateView):
+    model = User
+    template_name = 'authapp/users-create.html'
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('auth:users_read')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserCreateView, self).dispatch(request, *args, **kwargs)
+
+
+class UserUpdateView(UpdateView):
+    model = User
+    template_name = 'authapp/users-update-delete.html'
+    form_class = UserProfileForm
+
+    def get_context_data(self, **kwargs):
+        content = super(UserUpdateView, self).get_context_data(**kwargs)
+        content['title'] = 'Редактирование пользователя'
+        return content
+
+
+class UserDeleteView(DeleteView):
+    model = User
+    template_name = 'authapp/users-update-delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(reverse('auth:login'))
+
+
+def login(request):
+    title = 'Вход'
+
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('auth:users_read'))
+    else:
+        form = UserLoginForm()
+    content = {'title': title, 'form': form}
+    return render(request, 'authapp/login.html', content)
