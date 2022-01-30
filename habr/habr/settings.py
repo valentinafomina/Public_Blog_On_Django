@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'adminapp',
     'moderation',
     'userprofile',
-    # 'articleapp',
+    'articleapp',
 ]
 
 MIDDLEWARE = [
@@ -94,6 +94,9 @@ DATABASES = {
         'CHARSET': 'utf8',
     }
 }
+
+# Auth model
+AUTH_USER_MODEL = "authapp.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
