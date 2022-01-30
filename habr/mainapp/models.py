@@ -2,6 +2,8 @@ from django.conf.global_settings import AUTH_USER_MODEL
 from django.db import models
 from django.utils import timezone
 
+from authapp.models import User
+
 
 class ArticleCategory(models.Model):
     name = models.CharField(
@@ -31,7 +33,8 @@ class Article(models.Model):
     # )
 
     # Django based user, to be deleted upon creation of custom User model
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200)
     article_text = models.TextField()
@@ -51,7 +54,8 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     text = models.TextField()

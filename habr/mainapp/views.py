@@ -1,6 +1,9 @@
 from django.views.generic import ListView, DetailView
+from django.http import HttpResponse
+from django.shortcuts import render
+from datetime import datetime
 
-from .forms import CommentForm
+from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
 
 
@@ -49,5 +52,20 @@ class ArticleView(DetailView):
         pass
 
 
-def create_article():
-    return None
+def create_article(request):
+
+    article_create_form = CreateArticleForm(request.POST)
+    context = {'article_create_form': article_create_form}
+
+    if request.method == "POST":
+
+        if article_create_form.is_valid():
+
+            new_article = article_create_form.save(commit=False)
+            new_article.user = request.user
+            new_article.entryTime = datetime.now()
+            new_article.save()
+        return render(request, 'mainapp/articles.html', context)
+
+    else:
+        return render(request, 'mainapp/create_article.html', context)
