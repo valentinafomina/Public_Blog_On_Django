@@ -49,3 +49,14 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    text = models.TextField()
+    is_banned = models.BooleanField(default=None, null=True)
+
+
+
