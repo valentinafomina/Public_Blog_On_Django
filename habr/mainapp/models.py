@@ -23,7 +23,6 @@ class ArticleCategory(models.Model):
 
 
 class Article(models.Model):
-
     # CATEGORY_CHOICES = (
     #     ("DESIGN", "Design"),
     #     ("WEB_DEV", "Web Development"),
@@ -57,6 +56,3 @@ class Comment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     text = models.TextField()
     is_banned = models.BooleanField(default=None, null=True)
-
-
-

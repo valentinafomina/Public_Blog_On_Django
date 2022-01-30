@@ -3,7 +3,6 @@ from .models import Article, Comment
 
 
 class CreateArticleForm(forms.ModelForm):
-
     class Meta:
         model = Article
         fields = ['title', 'category', 'article_text']
@@ -19,7 +18,6 @@ class CreateArticleForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
-
     class Meta:
         model = Comment
         fields = ['text']

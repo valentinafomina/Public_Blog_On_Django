@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'adminapp',
     'moderation',
     'userprofile',
-    'articleapp',
 ]
 
 MIDDLEWARE = [
