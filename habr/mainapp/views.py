@@ -1,14 +1,7 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from datetime import datetime
 from django.views.generic import ListView, DetailView
 
-from .forms import CreateArticleForm
-from .models import ArticleCategory, Article
-
-
-def index(request):
-    pass
+from .forms import CommentForm
+from .models import ArticleCategory, Article, Comment
 
 
 class ArticlesView(ListView):
@@ -54,3 +47,7 @@ class ArticleView(DetailView):
 
     def post(self, request, *args, **kwargs):
         pass
+
+
+def create_article():
+    return None
