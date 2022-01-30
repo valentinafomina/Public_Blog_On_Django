@@ -1,0 +1,36 @@
+{% extends 'articleapp/base.html' %}
+
+{% block content %}
+
+<!--<div class="container-s">-->
+<!--    <form method="post" id="FormOne">-->
+<!--                {% csrf_token %}-->
+<!--            <div class="container-s">-->
+<!--                {% for field in article_create_form %}-->
+<!--                <ul> {{field.label}}</ul>-->
+<!--                <ul> {{field}}</ul>-->
+<!--                {% endfor %}-->
+<!--            </div>-->
+<!--            <div >-->
+<!--                <input type='submit' value="Отправить"/>-->
+<!--            </div>-->
+<!--    </form>-->
+<!--</div>-->
+
+<div class="container-s">
+    <form method="post" id="FormOne">
+        {% csrf_token %}
+
+        {% for field in article_create_form %}
+            <div class="mb-3 row">
+                <label class="form-label">{{field.label}}</label>
+                <div class="col-sm-4">{{field}}</div>
+            </div>
+        {% endfor %}
+                    <div >
+                <input type='submit' value="Отправить"/>
+            </div>
+    </form>
+</div>
+
+{% endblock %}
