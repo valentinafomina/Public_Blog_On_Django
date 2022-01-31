@@ -1,7 +1,7 @@
 from django.contrib import auth
 from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import User
@@ -9,12 +9,12 @@ from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
 
 
 # CRUD - Create Read Update Delete
-class UserListView(ListView):
+class UserDetailView(DetailView):
     model = User
-    template_name = 'authapp/users-read.html'
+    template_name = 'authapp/users-detail.html'
 
     def dispatch(self, request, *args, **kwargs):
-        return super(UserListView, self).dispatch(request, *args, **kwargs)
+        return super(UserDetailView, self).dispatch(request, *args, **kwargs)
 
 
 class UserCreateView(CreateView):
@@ -60,8 +60,14 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('auth:users_read'))
+                return
+                # return HttpResponseRedirect(reverse('auth:users_read'))
     else:
         form = UserLoginForm()
     content = {'title': title, 'form': form}
     return render(request, 'authapp/login.html', content)
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('index'))
