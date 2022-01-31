@@ -1,0 +1,16 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <h1 class="mt-4">Пользователи</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+                <br>{{ user.avatar_link }}
+                <br>Никнейм: {{ user.username }}
+                <br>Имя: {{ user.first_name }}
+                <br>Фамилия: {{ user.last_name }}
+                <br>Адрес эл. почты: {{ user.email }}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
