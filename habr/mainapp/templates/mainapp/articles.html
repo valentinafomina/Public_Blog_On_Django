@@ -1,7 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'mainapp/base.html' %}
 {% load static %}
 
 {% block content %}
+
     <section class="u-clearfix u-section-1" id="sec-bbc1">
       <div class="u-clearfix u-sheet u-sheet-1">
         <a href="index.html" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
@@ -55,6 +56,7 @@
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-expanded-width u-form u-form-1">
           <form action="#" method="POST" class="u-clearfix u-form-horizontal u-form-spacing-29 u-inner-form" style="padding: 29px;" source="custom">
+            {% csrf_token %}
             <div class="u-form-group u-label-top u-form-group-1">
               <label for="text-0535" class="u-form-control-hidden u-label"></label>
               <input type="text" placeholder="Ваш комментарий" id="text-0535" name="text" class="u-border-1 u-border-grey-30 u-input u-input-rectangle">
