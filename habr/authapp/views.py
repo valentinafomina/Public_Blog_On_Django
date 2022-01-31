@@ -60,7 +60,8 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('auth:users_read'))
+                return
+                # return HttpResponseRedirect(reverse('auth:users_read'))
     else:
         form = UserLoginForm()
     content = {'title': title, 'form': form}
