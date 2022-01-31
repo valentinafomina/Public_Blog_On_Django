@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.shortcuts import HttpResponseRedirect, render
+from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -21,7 +21,7 @@ class UserCreateView(CreateView):
     model = User
     template_name = 'authapp/users-create.html'
     form_class = UserRegisterForm
-    success_url = reverse_lazy('auth:users_read')
+    success_url = reverse_lazy('auth:users_detail')
 
     def dispatch(self, request, *args, **kwargs):
         return super(UserCreateView, self).dispatch(request, *args, **kwargs)
@@ -60,8 +60,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                return
-                # return HttpResponseRedirect(reverse('auth:users_read'))
+                return redirect(get_redirect_url())
     else:
         form = UserLoginForm()
     content = {'title': title, 'form': form}
