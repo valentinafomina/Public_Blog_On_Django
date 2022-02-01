@@ -23,27 +23,20 @@
       </div>
     </section>
 
-<div class="auth_form">
 <div class="container-s">
     <form method="post" id="FormOne">
         {% csrf_token %}
 
         {% for field in article_create_form %}
             <div class="mb-3 row">
-                <div class="h_article">
                 <label class="form-label">{{field.label}}</label>
-                      </div>
-                <div class="w-50 p-3 col-sm-4">{{field}}</div>
+                <div class="col-sm-4">{{field}}</div>
             </div>
         {% endfor %}
-        <div class="article_btn">
-                    <div>
+                    <div >
                 <input type='submit' value="Отправить"/>
             </div>
-        </div>
     </form>
 </div>
-    </div>
-
 
 {% endblock %}
