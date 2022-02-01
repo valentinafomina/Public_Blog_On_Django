@@ -3,7 +3,6 @@ from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import LoginView
 
 from .models import User
 from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
@@ -47,7 +46,6 @@ class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
-    success_url = reverse_lazy('main:articles')
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)

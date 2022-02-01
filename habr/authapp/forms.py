@@ -23,8 +23,8 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserProfileForm(UserChangeForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}))
-    email = forms.CharField(widget=forms.EmailInput(attrs={'readonly': True}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'readonly': False}))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'readonly': False}))
     first_name = forms.CharField(widget=forms.TextInput())
     last_name = forms.CharField(widget=forms.TextInput())
     avatar_link = forms.ImageField(widget=forms.FileInput(), required=False)
