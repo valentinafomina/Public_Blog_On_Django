@@ -5,6 +5,9 @@ from .views import ArticlesView, ArticleView
 
 
 app_name = 'mainapp'
+# В конце файла:
+
+
 
 urlpatterns = [
     path('', ArticlesView.as_view(), name='articles'),
@@ -12,3 +15,4 @@ urlpatterns = [
     path('article/<int:pk>/', ArticleView.as_view(), name='article'),
     path('article/create/', views.create_article, name='create_article'),
 ]
+
