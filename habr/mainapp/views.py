@@ -1,5 +1,3 @@
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -13,7 +11,7 @@ class ArticlesView(ListView):
     model = Article
     ordering = 'published_date'
     paginate_by = 10
-    template_name = 'mainapp/articles.html'
+    template_name = 'mainapp.articles.html'
     context_object_name = 'articles'
     extra_context = {
         'title': 'Habr',
@@ -32,47 +30,26 @@ class ArticlesView(ListView):
             return queryset
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class ArticleView(DetailView):
     model = Article
-    template_name = 'mainapp/article.html'
+    template_name = 'mainapp.article.html'
     context_object_name = 'article'
 
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
         context['title'] = 'Habr'
         context['categories'] = ArticleCategory.objects.all()
-        context['form'] = CommentForm()
+        context['comment'] = CommentForm()
         comments = self.get_comments()
         context['comments'] = comments
-        # context['user'] = self.request.User
         return context
 
     def get_comments(self):
-        comments = Comment.objects.filter(article__pk=self.kwargs['pk'])
+        comments = Comment.objects.filter(article=self.kwargs['pk'])
         return comments
 
     def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        self.object = self.get_object()
-        context = self.get_context_data(**kwargs)
-        context['form'] = form
-
-        if form.is_valid():
-            text = form.cleaned_data['text']
-            author = self.request.user
-            article = self.get_object()
-            comments = self.get_comments()
-
-            comment = Comment.objects.create(author=author, article=article, text=text)
-            comment.save()
-
-            form = CommentForm()
-            context['form'] = form
-            context['comments'] = comments
-            return self.render_to_response(context=context)
-
-        return self.render_to_response(context=context)
+        pass
 
 
 def create_article(request):

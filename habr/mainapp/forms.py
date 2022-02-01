@@ -7,8 +7,8 @@ class CreateArticleForm(forms.ModelForm):
         model = Article
         fields = ['title', 'category', 'article_text']
         labels = {
-            'title': 'Введите заголовок',
-            'article_text': "Ваши мысли тут"
+            'title': 'Заголовок',
+            'article_text': "Описание"
         }
 
     def __init__(self, *args, **kwargs):
