@@ -47,7 +47,7 @@ class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
-    success_url = '/auth/profile/2/'
+    success_url = '/'
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)
