@@ -1,9 +1,9 @@
+from pyexpat import model
 from django.contrib import auth
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import LoginView
 
 from .models import User
 from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
@@ -22,20 +22,37 @@ class UserCreateView(CreateView):
     model = User
     template_name = 'authapp/users-create.html'
     form_class = UserRegisterForm
-    success_url = reverse_lazy('auth:users_detail')
 
     def dispatch(self, request, *args, **kwargs):
         return super(UserCreateView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Регистрация'
+        next = ''
+        if self.request.GET:
+            next = self.request.GET['next']
+        if next != '':
+            context['next'] = next
+        return context
+
+    def get_success_url(self):
+        next_url = self.request.GET['next']
+        if next_url:
+            return next_url
+        return reverse_lazy('main:articles')
 
 
 class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
+    success_url = '/auth/profile/2/'
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)
         content['title'] = 'Редактирование пользователя'
+        content['user'] = User.objects.get(username = self.request.user)
         return content
 
 
@@ -50,41 +67,32 @@ class UserDeleteView(DeleteView):
         return HttpResponseRedirect(reverse('auth:login'))
 
 
-class UserLoginView(LoginView):
-    model = User
-    template_name = 'authapp/login.html'
-    form_class = UserLoginForm
-    redirect_authenticated_user = True
+def login(request):
+    title = 'Вход'
+    next = ''
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.redirect_authenticated_user and self.request.user.is_authenticated:
-            redirect_to = self.get_redirect_url()
-            if redirect_to == self.request.path:
-                raise ValueError(
-                    "Redirection loop for authenticated user detected. Check that "
-                    "your LOGIN_REDIRECT_URL doesn't point to a login page."
-                )
-            return HttpResponseRedirect(redirect_to)
-        return super().dispatch(request, *args, **kwargs)
+    if request.GET:
+        next = request.GET['next']
 
-
-
-# def login(request):
-#     title = 'Вход'
-#
-#     if request.method == 'POST':
-#         form = UserLoginForm(data=request.POST)
-#         if form.is_valid():
-#             username = request.POST['username']
-#             password = request.POST['password']
-#             user = auth.authenticate(username=username, password=password)
-#             if user and user.is_active:
-#                 auth.login(request, user)
-#                 return HttpResponseRedirect(reverse('/'))
-#     else:
-#         form = UserLoginForm()
-#     content = {'title': title, 'form': form}
-#     return render(request, 'authapp/login.html', content)
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                print(request)
+                print(next)
+                if next:
+                    return HttpResponseRedirect(next)
+                return HttpResponseRedirect(reverse('main:articles'))
+    else:
+        form = UserLoginForm()
+    content = {'title': title, 'form': form}
+    if next != '':
+        content['next'] = next
+    return render(request, 'authapp/login.html', content)
 
 
 def logout(request):

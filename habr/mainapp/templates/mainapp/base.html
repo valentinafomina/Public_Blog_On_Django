@@ -76,13 +76,13 @@
                                 </a>
                             </li>
                             <li class="u-nav-item">
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:login' %}">
+                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:login' %}?next={{request.path}}">
                                     Вход
                                 </a>
                             </li>
                             {% if user.is_authenticated %}
                             <li class="u-nav-item">
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:logout' %}?next={{request.path}}">
+                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:logout' %}">
                                     Выход
                                 </a>
                             </li>

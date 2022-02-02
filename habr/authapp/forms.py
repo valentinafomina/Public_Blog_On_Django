@@ -23,17 +23,15 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserProfileForm(UserChangeForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}))
-    email = forms.CharField(widget=forms.EmailInput(attrs={'readonly': True}))
+    username = forms.CharField(widget=forms.TextInput())
+    email = forms.CharField(widget=forms.EmailInput())
     first_name = forms.CharField(widget=forms.TextInput())
     last_name = forms.CharField(widget=forms.TextInput())
     avatar_link = forms.ImageField(widget=forms.FileInput(), required=False)
-    user_about = forms.CharField(widget=forms.TextInput())
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'avatar_link', 'user_about')
-
+        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name')
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
