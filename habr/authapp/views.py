@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.contrib import auth
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
@@ -46,10 +47,12 @@ class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
+    success_url = '/auth/profile/2/'
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)
         content['title'] = 'Редактирование пользователя'
+        content['user'] = User.objects.get(username = self.request.user)
         return content
 
 
