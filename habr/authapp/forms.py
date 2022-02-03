@@ -1,3 +1,5 @@
+import re
+from urllib import request
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from .models import User
@@ -20,6 +22,36 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name', 'password1', 'password2')
+
+    def clean(self):
+        cleaned_data = super(UserRegisterForm, self).clean()
+        username = cleaned_data.get("username")
+        password = cleaned_data.get("password1")
+        email = cleaned_data.get("email")
+        confirm_password = cleaned_data.get("password2")
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
+
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                "Никнейм уже занят."
+            )
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "Данный email уже зарегистрирован на сайте."
+            )
+        elif password != confirm_password:
+            raise forms.ValidationError(
+                "Пароли не совпадают."
+            )
+        elif len(password) <= 6:
+            raise forms.ValidationError(
+                "Пароль должен содержать не менее 6 символов."
+            )
+        elif r'\w' not in password.split() and re.match(pattern, password) is None and (password.isupper() or password.islower()):
+            raise forms.ValidationError(
+                "Пароль должен содержать строчные латинские буквы в верхнем и нижнем регистрах."
+            )
+        
 
 
 class UserProfileForm(UserChangeForm):
