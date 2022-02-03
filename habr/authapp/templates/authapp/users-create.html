@@ -11,7 +11,7 @@
             alert-dismissible fade show" role="alert"
                 style="margin-top: 50px;">
             {% if messages %}
-                {% for message in messages %}
+                 {% for message in messages %}
                     {{ message }}
                 {% endfor %}
             {% elif form.non_field_errors%}
@@ -64,7 +64,7 @@
         </div>
         <div class="form-row">
             <div class="col-lg-6">
-                <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                <label class="small mb-1" for="{{ form.username.id_for_label }}">Никнейм</label>
                 {{ form.username }}
             </div>
             <div class="col-lg-6">
