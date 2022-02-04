@@ -117,3 +117,10 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
+
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    login_url = '/authenticate/login/'
+    success_url = reverse_lazy('mainapp:articles')
+
+
