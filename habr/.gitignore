@@ -4,6 +4,7 @@ venv/
 db.sqlite3
 **/.idea/
 .idea/*
+.idea/
 media
 __pycache__/
 **/.idea/habr.iml
