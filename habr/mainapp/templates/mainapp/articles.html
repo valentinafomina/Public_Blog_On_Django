@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block content %}
-<a href="{% url 'main:create_article' %}">CCCSSDSSKKKKRFF</a>
+<a href="{% url 'main:create_article' %}">CREATE</a>
+<a href="{% url 'main:update_article' 10 %}">UPDATE</a>
 
 <div class="category-products clearfix">
   {% for article in articles %}

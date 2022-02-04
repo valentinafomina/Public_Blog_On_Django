@@ -98,4 +98,22 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    template_name = 'mainapp/create_article.html'
+    form_class = CreateArticleForm
+    pk = None
+    login_url = '/authenticate/login/'
+
+    # def form_valid(self, form):
+    #     instance = form.save(commit=False)
+    #     instance.user = self.request.user
+    #     instance.save()
+    #     self.object = instance
+    #     self.pk = instance.id
+    #     return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
