@@ -2,7 +2,7 @@ venv/
 **/*.pyc
 **/*.env
 db.sqlite3
-.idea
+.idea/
 .idea/*
 media
 __pycache__/

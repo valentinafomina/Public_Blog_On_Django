@@ -27,13 +27,13 @@
     <form method="post" id="FormOne">
         {% csrf_token %}
 
-        {% for field in article_create_form %}
+        {% for field in form %}
             <div class="mb-3 row">
                 <label class="form-label">{{field.label}}</label>
                 <div class="col-sm-4">{{field}}</div>
             </div>
         {% endfor %}
-                    <div >
+                    <div>
                 <input type='submit' value="Отправить"/>
             </div>
     </form>
