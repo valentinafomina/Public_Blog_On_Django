@@ -6,3 +6,7 @@ db.sqlite3
 .idea/*
 media
 __pycache__/
+.idea/habr.iml
+.idea/misc.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
