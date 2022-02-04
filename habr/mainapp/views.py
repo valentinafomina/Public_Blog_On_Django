@@ -24,6 +24,7 @@ class ArticlesView(ListView):
 
     def get_queryset(self):
         queryset = super(ArticlesView, self).get_queryset()
+        queryset = queryset.filter(is_published=True)
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
