@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -77,11 +78,12 @@ class ArticleView(DetailView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ArticleCreateView(CreateView):
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = 'mainapp/create_article.html'
     form_class = CreateArticleForm
     pk = None
+    login_url = '/authenticate/login/'
 
     def form_valid(self, form):
         instance = form.save(commit=False)
