@@ -23,6 +23,10 @@ class ArticleCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_category_query_set(self):
+        queryset = self.objects.all()
+        return queryset
+
 
 class Article(models.Model):
     # CATEGORY_CHOICES = (

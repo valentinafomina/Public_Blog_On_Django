@@ -7,7 +7,11 @@
         <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
       </div>
     </section>
-    <h1>{{article}}</h1>
+    <h1>{{article.title}}</h1>
+    <p>Автор {{article.user}}</p>
+    <p>Категория {{article.category}}</p>
+    <p>{{article.article_text}}</p>
+
 
  {% if comments %}
   <div class="row mt-5">

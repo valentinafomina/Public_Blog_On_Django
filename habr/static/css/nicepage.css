@@ -1,18 +1,15 @@
-/*begin-commonstyles library*//*!
- * froala_editor v4.0.6 (https://www.froala.com/wysiwyg-editor)
- * License https://froala.com/wysiwyg-editor/terms/
- * Copyright 2014-2021 Froala Labs
- */
-
 .auth_form {
     position: relative;
     left: 400px;
 }
+.login_form1 {
+    position: relative;
+    margin-left: 250px;
+    margin-right: 250px;
+}
 .login_form {
     position: relative;
-    left: 420px;
     margin-bottom: 48px;
-
 }
 
 .auth_btn {
@@ -24,12 +21,9 @@
 .h_auth {
     text-align: center;
 }
-.h_article {
-    margin-left: 300px;
-}
+
 .article_btn {
     position: relative;
-    left: 300px;
     margin-top: 33px;
     margin-bottom: 33px;
 }
