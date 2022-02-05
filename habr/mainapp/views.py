@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from datetime import datetime
 
@@ -21,11 +21,11 @@ class ArticlesView(ListView):
     }
 
     def get_queryset(self):
-        queryset = super(ArticlesView, self).get_queryset()
+        queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
-            elif self.kwargs['pk'] == 1:
+            elif self.kwargs['pk'] != 0:
                 queryset = queryset.filter(category_id__pk=self.kwargs['pk'])
                 return queryset
         else:
@@ -88,7 +88,14 @@ def create_article(request):
             new_article.user = request.user
             new_article.entryTime = datetime.now()
             new_article.save()
-        return render(request, 'mainapp/articles.html', context)
+        return HttpResponseRedirect('/', context)
 
     else:
         return render(request, 'mainapp/create_article.html', context)
+
+
+def about_us(request):
+    title = 'о нас'
+    content = {'title': title}
+
+    return render(request, 'mainapp/about_us.html', content)
