@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from datetime import datetime
@@ -23,12 +23,11 @@ class ArticlesView(ListView):
     }
 
     def get_queryset(self):
-        queryset = super(ArticlesView, self).get_queryset()
-        queryset = queryset.filter(is_published=True)
+        queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
-            elif self.kwargs['pk'] == 1:
+            elif self.kwargs['pk'] != 0:
                 queryset = queryset.filter(category_id__pk=self.kwargs['pk'])
                 return queryset
         else:
@@ -118,9 +117,18 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
 
-class ArticleDeleteView(LoginRequiredMixin, DeleteView):
-    model = Article
-    login_url = '/authenticate/login/'
-    success_url = reverse_lazy('mainapp:articles')
+            new_article = article_create_form.save(commit=False)
+            new_article.user = request.user
+            new_article.entryTime = datetime.now()
+            new_article.save()
+        return HttpResponseRedirect('/', context)
+
+    else:
+        return render(request, 'mainapp/create_article.html', context)
 
 
+def about_us(request):
+    title = 'о нас'
+    content = {'title': title}
+
+    return render(request, 'mainapp/about_us.html', content)
