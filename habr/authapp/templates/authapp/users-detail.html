@@ -14,7 +14,7 @@
                 <br>Фамилия: {{ user.last_name }}
                 <br>Адрес эл. почты: {{ user.email }}
         </div>
-        <div class="small"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
+        <div class="btn btn-link"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
     </div>
 
     {% endif %}
