@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from datetime import datetime
@@ -116,15 +116,15 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
-
-            new_article = article_create_form.save(commit=False)
-            new_article.user = request.user
-            new_article.entryTime = datetime.now()
-            new_article.save()
-        return HttpResponseRedirect('/', context)
-
-    else:
-        return render(request, 'mainapp/create_article.html', context)
+    #
+    #         new_article = article_create_form.save(commit=False)
+    #         new_article.user = request.user
+    #         new_article.entryTime = datetime.now()
+    #         new_article.save()
+    #     return HttpResponseRedirect('/', context)
+    #
+    # else:
+    #     return render(request, 'mainapp/create_article.html', context)
 
 
 def about_us(request):
