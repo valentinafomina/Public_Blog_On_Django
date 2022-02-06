@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView
@@ -11,8 +13,8 @@ from .models import ArticleCategory, Article, Comment
 
 class ArticlesView(ListView):
     model = Article
-    ordering = 'published_date'
-    paginate_by = 10
+    ordering = '-created_date'
+    paginate_by = 100
     template_name = 'mainapp/articles.html'
     context_object_name = 'articles'
     extra_context = {
@@ -75,14 +77,45 @@ class ArticleView(DetailView):
         return self.render_to_response(context=context)
 
 
-def create_article(request):
+@method_decorator(csrf_exempt, name='dispatch')
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    model = Article
+    template_name = 'mainapp/create_article.html'
+    form_class = CreateArticleForm
+    pk = None
+    login_url = '/authenticate/login/'
 
-    article_create_form = CreateArticleForm(request.POST)
-    context = {'article_create_form': article_create_form}
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        self.object = instance
+        self.pk = instance.id
+        return HttpResponseRedirect(self.get_success_url())
 
-    if request.method == "POST":
+    def get_success_url(self):
+        return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
-        if article_create_form.is_valid():
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    template_name = 'mainapp/create_article.html'
+    form_class = CreateArticleForm
+    pk = None
+    login_url = '/authenticate/login/'
+
+    # def form_valid(self, form):
+    #     instance = form.save(commit=False)
+    #     instance.user = self.request.user
+    #     instance.save()
+    #     self.object = instance
+    #     self.pk = instance.id
+    #     return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
+
 
             new_article = article_create_form.save(commit=False)
             new_article.user = request.user

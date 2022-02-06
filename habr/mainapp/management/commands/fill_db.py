@@ -27,7 +27,8 @@ class Command(BaseCommand):
                 new_article = Article.objects.create(user=_user,
                                                      title=f'test {i} / {j}',
                                                      article_text='test'*20,
-                                                     category=_category
+                                                     category=_category,
+                                                     is_published=True
                                                      )
                 new_article.save()
                 for _ in range(5):
