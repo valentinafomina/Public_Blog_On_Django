@@ -24,6 +24,7 @@ class ArticlesView(ListView):
 
     def get_queryset(self):
         queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
+        queryset = queryset.filter(is_published=True, is_banned=False)
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
@@ -83,7 +84,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'mainapp/create_article.html'
     form_class = CreateArticleForm
     pk = None
-    login_url = '/authenticate/login/'
+    login_url = '/auth/login/'
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -103,7 +104,7 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'mainapp/create_article.html'
     form_class = CreateArticleForm
     pk = None
-    login_url = '/authenticate/login/'
+    login_url = '/auth/login/'
 
     # def form_valid(self, form):
     #     instance = form.save(commit=False)
@@ -126,6 +127,11 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     # else:
     #     return render(request, 'mainapp/create_article.html', context)
 
+
+# class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Article
+#     login_url = '/authenticate/login/'
+#     success_url = reverse_lazy('mainapp:articles')
 
 def about_us(request):
     title = 'о нас'
