@@ -57,7 +57,6 @@ class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
-    success_url = '/'
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)
@@ -67,6 +66,11 @@ class UserUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return User.objects.get(username=self.request.user)
+
+    def get_success_url(self):
+        profile_id = User.objects.get(username = self.request.user).id
+        return reverse_lazy('auth:users_detail', kwargs={'pk': profile_id})
+
 
 class UserDeleteView(DeleteView):
     model = User
