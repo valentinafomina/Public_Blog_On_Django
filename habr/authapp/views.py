@@ -62,7 +62,7 @@ class UserDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.is_active = False
+        self.object.is_active = 0
         self.object.save()
         return HttpResponseRedirect(reverse('auth:login'))
 
