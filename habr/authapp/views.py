@@ -82,6 +82,9 @@ class UserDeleteView(DeleteView):
         self.object.save()
         return HttpResponseRedirect(reverse('auth:login'))
 
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.request.user)
+
 
 def login(request):
     title = 'Вход'
