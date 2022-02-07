@@ -17,6 +17,16 @@ class UserDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super(UserDetailView, self).dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        content = super().get_context_data(**kwargs)
+        content['title'] = 'Профиль'
+        content['user'] = User.objects.get(username=self.request.user)
+        if content['user'].id == self.get_object().id:
+            content['edit_visible'] = 'True'
+        else:
+            content['edit_visible'] = 'False'
+        return content
+
 
 class UserCreateView(CreateView):
     model = User
@@ -27,14 +37,14 @@ class UserCreateView(CreateView):
         return super(UserCreateView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
+        content = super().get_context_data(**kwargs)
+        content['title'] = 'Регистрация'
         next = ''
         if self.request.GET:
             next = self.request.GET['next']
         if next != '':
-            context['next'] = next
-        return context
+            content['next'] = next
+        return content
 
     def get_success_url(self):
         next_url = self.request.GET['next']
@@ -55,6 +65,8 @@ class UserUpdateView(UpdateView):
         content['user'] = User.objects.get(username = self.request.user)
         return content
 
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.request.user)
 
 class UserDeleteView(DeleteView):
     model = User

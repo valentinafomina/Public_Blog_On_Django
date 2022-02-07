@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="mt-4">Редактирование пользователя | {{ user.username }}</h1>
     <div class="card-body">
-        <form action="{% url 'auth:users_update' user.id %}" method="post"
+        <form action="{% url 'auth:users_update' %}" method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row">
