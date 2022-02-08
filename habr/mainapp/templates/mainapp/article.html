@@ -42,4 +42,8 @@
     <input type="submit" value="Submit" />
 </form>
 <h1>{{user}}</h1>
+<a class='btn btn-primary' href="{% url 'mainapp:delete_article' article.pk %}">Удалить статью</a>
+{% for art in same_articles %}
+<div>{{ art }}</div>
+{% endfor %}
 {% endblock %}

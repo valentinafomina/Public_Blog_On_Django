@@ -2,10 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from datetime import datetime
 
 from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
@@ -24,7 +23,7 @@ class ArticlesView(ListView):
 
     def get_queryset(self):
         queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
-        queryset = queryset.filter(is_published=True, is_banned=False)
+        queryset = queryset.filter(is_published=True, is_banned=False, is_active=True)
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
@@ -48,7 +47,7 @@ class ArticleView(DetailView):
         context['form'] = CommentForm()
         comments = self.get_comments()
         context['comments'] = comments
-        # context['user'] = self.request.User
+        context['same_articles'] = self.get_same_articles()
         return context
 
     def get_comments(self):
@@ -76,6 +75,11 @@ class ArticleView(DetailView):
             return self.render_to_response(context=context)
 
         return self.render_to_response(context=context)
+
+    def get_same_articles(self):
+        category = self.object.category
+        same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
+        return same_articles
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -106,32 +110,25 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     pk = None
     login_url = '/auth/login/'
 
-    # def form_valid(self, form):
-    #     instance = form.save(commit=False)
-    #     instance.user = self.request.user
-    #     instance.save()
-    #     self.object = instance
-    #     self.pk = instance.id
-    #     return HttpResponseRedirect(self.get_success_url())
-
     def get_success_url(self):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
-    #
-    #         new_article = article_create_form.save(commit=False)
-    #         new_article.user = request.user
-    #         new_article.entryTime = datetime.now()
-    #         new_article.save()
-    #     return HttpResponseRedirect('/', context)
-    #
-    # else:
-    #     return render(request, 'mainapp/create_article.html', context)
 
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    login_url = '/authenticate/login/'
+    success_url = reverse_lazy('mainapp:articles')
 
-# class ArticleDeleteView(LoginRequiredMixin, DeleteView):
-#     model = Article
-#     login_url = '/authenticate/login/'
-#     success_url = reverse_lazy('mainapp:articles')
+    def form_valid(self, form):
+        self.object = self.get_object()
+        if self.object.is_active:
+            self.object.is_active = False
+        else:
+            self.object.is_active = True
+        self.object.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
 
 def about_us(request):
     title = 'о нас'
