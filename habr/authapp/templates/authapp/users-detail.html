@@ -1,10 +1,11 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 
 {% block content %}
     <h1 class="mt-4">Профиль</h1>
     <div class="card mb-4">
         <div class="card-body">
-                <br>{{ user.avatar_link }}
+                <img height="150" src="{{ MEDIA_URL }}{{ user.avatar_link }}" alt="">
                 <br>Никнейм: {{ user.username }}
                 <br>Имя: {{ user.first_name }}
                 <br>Фамилия: {{ user.last_name }}
