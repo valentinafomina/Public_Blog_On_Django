@@ -16,6 +16,9 @@
     <p>Автор {{article.user}}</p>
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
+<div class="media-right">
+  <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
+</div>
 
 <div class="tm-separated-list tm-article-presenter__meta-list">
     <span class="tm-separated-list__title">
