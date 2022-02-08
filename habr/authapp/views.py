@@ -17,6 +17,16 @@ class UserDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super(UserDetailView, self).dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        content = super().get_context_data(**kwargs)
+        content['title'] = 'Профиль'
+        content['user'] = User.objects.get(username=self.request.user)
+        if content['user'].id == self.get_object().id:
+            content['edit_visible'] = 'True'
+        else:
+            content['edit_visible'] = 'False'
+        return content
+
 
 class UserCreateView(CreateView):
     model = User
@@ -27,14 +37,14 @@ class UserCreateView(CreateView):
         return super(UserCreateView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Регистрация'
+        content = super().get_context_data(**kwargs)
+        content['title'] = 'Регистрация'
         next = ''
         if self.request.GET:
             next = self.request.GET['next']
         if next != '':
-            context['next'] = next
-        return context
+            content['next'] = next
+        return content
 
     def get_success_url(self):
         next_url = self.request.GET['next']
@@ -47,13 +57,19 @@ class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'
     form_class = UserProfileForm
-    success_url = '/'
 
     def get_context_data(self, **kwargs):
         content = super(UserUpdateView, self).get_context_data(**kwargs)
         content['title'] = 'Редактирование пользователя'
         content['user'] = User.objects.get(username = self.request.user)
         return content
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.request.user)
+
+    def get_success_url(self):
+        profile_id = User.objects.get(username = self.request.user).id
+        return reverse_lazy('auth:users_detail', kwargs={'pk': profile_id})
 
 
 class UserDeleteView(DeleteView):
@@ -62,9 +78,12 @@ class UserDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.is_active = False
+        self.object.is_active = 0
         self.object.save()
         return HttpResponseRedirect(reverse('auth:login'))
+
+    def get_object(self, queryset=None):
+        return User.objects.get(username=self.request.user)
 
 
 def login(request):

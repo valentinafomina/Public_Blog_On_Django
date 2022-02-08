@@ -1,10 +1,8 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 
 {% block content %}
-
-
     <h1 class="mt-4">Создание пользователя</h1>
-
     {% if messages or form.non_field_errors or form.email.errors or form.password.errors%}
         <div class="alert
             {% if messages %} alert-success {% else %} alert-warning {% endif %}

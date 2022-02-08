@@ -9,10 +9,6 @@ class UserRegisterForm(UserCreationForm):
         'placeholder': 'Введите имя пользователя'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
         'placeholder': 'Введите адрес эл. почты'}))
-    first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': 'Введите имя'}))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': 'Введите фамилию'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'placeholder': 'Введите пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -21,7 +17,7 @@ class UserRegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
