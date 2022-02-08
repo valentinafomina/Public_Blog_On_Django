@@ -23,6 +23,10 @@ class ArticleCategory(models.Model):
     def __str__(self):
         return self.name
 
+    def get_category_query_set(self):
+        queryset = self.objects.all()
+        return queryset
+
 
 class Article(models.Model):
     # CATEGORY_CHOICES = (
@@ -41,7 +45,9 @@ class Article(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
-    is_banned = models.BooleanField(default=None, null=True)
+    is_published = models.BooleanField(default=False, null=True)
+    is_banned = models.BooleanField(default=False, null=True)
+    is_active = models.BooleanField(default=True)
     category = models.ForeignKey(ArticleCategory, verbose_name='Категория',
                                  on_delete=models.CASCADE)
 

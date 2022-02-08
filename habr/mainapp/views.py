@@ -1,7 +1,10 @@
-from django.views.generic import ListView, DetailView
-from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from datetime import datetime
 
 from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
@@ -9,9 +12,9 @@ from .models import ArticleCategory, Article, Comment
 
 class ArticlesView(ListView):
     model = Article
-    ordering = 'published_date'
-    paginate_by = 10
-    template_name = 'mainapp.articles.html'
+    ordering = '-created_date'
+    paginate_by = 100
+    template_name = 'mainapp/articles.html'
     context_object_name = 'articles'
     extra_context = {
         'title': 'Habr',
@@ -19,53 +22,116 @@ class ArticlesView(ListView):
     }
 
     def get_queryset(self):
-        queryset = super(ArticlesView, self).get_queryset()
+        queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
+        queryset = queryset.filter(is_published=True, is_banned=False, is_active=True)
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
-            elif self.kwargs['pk'] == 1:
+            elif self.kwargs['pk'] != 0:
                 queryset = queryset.filter(category_id__pk=self.kwargs['pk'])
                 return queryset
         else:
             return queryset
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ArticleView(DetailView):
     model = Article
-    template_name = 'mainapp.article.html'
+    template_name = 'mainapp/article.html'
     context_object_name = 'article'
 
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
         context['title'] = 'Habr'
         context['categories'] = ArticleCategory.objects.all()
-        context['comment'] = CommentForm()
+        context['form'] = CommentForm()
         comments = self.get_comments()
         context['comments'] = comments
+        context['same_articles'] = self.get_same_articles()
         return context
 
     def get_comments(self):
-        comments = Comment.objects.filter(article=self.kwargs['pk'])
+        comments = Comment.objects.filter(article__pk=self.kwargs['pk'])
         return comments
 
     def post(self, request, *args, **kwargs):
-        pass
+        form = CommentForm(request.POST)
+        self.object = self.get_object()
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+
+        if form.is_valid():
+            text = form.cleaned_data['text']
+            author = self.request.user
+            article = self.get_object()
+            comments = self.get_comments()
+
+            comment = Comment.objects.create(author=author, article=article, text=text)
+            comment.save()
+
+            form = CommentForm()
+            context['form'] = form
+            context['comments'] = comments
+            return self.render_to_response(context=context)
+
+        return self.render_to_response(context=context)
+
+    def get_same_articles(self):
+        category = self.object.category
+        same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
+        return same_articles
 
 
-def create_article(request):
+@method_decorator(csrf_exempt, name='dispatch')
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    model = Article
+    template_name = 'mainapp/create_article.html'
+    form_class = CreateArticleForm
+    pk = None
+    login_url = '/auth/login/'
 
-    article_create_form = CreateArticleForm(request.POST)
-    context = {'article_create_form': article_create_form}
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        self.object = instance
+        self.pk = instance.id
+        return HttpResponseRedirect(self.get_success_url())
 
-    if request.method == "POST":
+    def get_success_url(self):
+        return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
-        if article_create_form.is_valid():
 
-            new_article = article_create_form.save(commit=False)
-            new_article.user = request.user
-            new_article.entryTime = datetime.now()
-            new_article.save()
-        return render(request, 'mainapp/articles.html', context)
+@method_decorator(csrf_exempt, name='dispatch')
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+    model = Article
+    template_name = 'mainapp/create_article.html'
+    form_class = CreateArticleForm
+    pk = None
+    login_url = '/auth/login/'
 
-    else:
-        return render(request, 'mainapp/create_article.html', context)
+    def get_success_url(self):
+        return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
+
+
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+    model = Article
+    login_url = '/authenticate/login/'
+    success_url = reverse_lazy('mainapp:articles')
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        if self.object.is_active:
+            self.object.is_active = False
+        else:
+            self.object.is_active = True
+        self.object.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+def about_us(request):
+    title = 'о нас'
+    content = {'title': title}
+
+    return render(request, 'mainapp/about_us.html', content)

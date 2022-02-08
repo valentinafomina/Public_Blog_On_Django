@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+<a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">На главную</a>
+<a href="/article/create" data-page-id="353919755" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать статью</a>
     <h1 class="mt-4">Профиль</h1>
     <div class="card mb-4">
         <div class="card-body">
@@ -11,9 +14,21 @@
                 <br>Фамилия: {{ user.last_name }}
                 <br>Адрес эл. почты: {{ user.email }}
         </div>
-        {% if edit_visible == 'True' %}
-            <div class="small"><a href="{% url 'auth:users_update'%}">Редактировать</a></div>
+        <div class="btn btn-link"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
+    </div>
+
+    {% endif %}
+
+   {% if user.is_not_authenticated %}
+    <h1 class="mt-4">Профиль</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+                <br>{{ user.avatar_link }}
+                <br>Никнейм: {{ user.username }}
+                <br>Имя: {{ user.first_name }}
+                <br>Фамилия: {{ user.last_name }}
+        </div>
+    </div>
         {% endif %}
 
-    </div>
 {% endblock %}
