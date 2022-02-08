@@ -4,7 +4,12 @@
 {% block content %}
     <section class="u-clearfix u-section-1" id="sec-d509">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+        <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-1" id="sec-d509">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Снять с публикации</a>
       </div>
     </section>
     <h1>{{article.title}}</h1>
@@ -15,6 +20,16 @@
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
 </div>
 
+<div class="tm-separated-list tm-article-presenter__meta-list">
+    <span class="tm-separated-list__title">
+        Тэги:
+    </span>
+    <ul class="tm-separated-list__list">
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+    </ul>
+</div>
 
  {% if comments %}
   <div class="row mt-5">
@@ -32,6 +47,9 @@
           <div class="col-12">
             <p class="m-1 mt-3">{{ comment.text }}</p>
             <p class="text-right text-muted"><small>{{ comment.created_at }}</small></p>
+                                  {% if user.is_superuser %}
+              <div class="btn btn-link"><a>Заблокировать комментарий</a></div>
+                                  {% endif %}
           </div>
         </div>
       </div>
@@ -39,14 +57,15 @@
     {% endfor %}
   </div>
   {% endif %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
-<h1>{{user}}</h1>
-<a class='btn btn-primary' href="{% url 'mainapp:delete_article' article.pk %}">Удалить статью</a>
-{% for art in same_articles %}
-<div>{{ art }}</div>
-{% endfor %}
+    {% if user.is_authenticated %}
+        <div class=form-control" style="width: 80%; margin-left: 10%;">
+        <form action="" method="post" class="form-control form-control-lg">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Отправить" class="btn btn-outline-dark" />
+        </form>
+        </div>
+        <h3>{{user}}</h3>
+    {% endif %}
+
 {% endblock %}

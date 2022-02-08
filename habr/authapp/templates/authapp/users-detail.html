@@ -14,8 +14,21 @@
                 <br>Фамилия: {{ user.last_name }}
                 <br>Адрес эл. почты: {{ user.email }}
         </div>
-        <div class="small"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
+        <div class="btn btn-link"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
     </div>
 
     {% endif %}
+
+   {% if user.is_not_authenticated %}
+    <h1 class="mt-4">Профиль</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+                <br>{{ user.avatar_link }}
+                <br>Никнейм: {{ user.username }}
+                <br>Имя: {{ user.first_name }}
+                <br>Фамилия: {{ user.last_name }}
+        </div>
+    </div>
+        {% endif %}
+
 {% endblock %}
