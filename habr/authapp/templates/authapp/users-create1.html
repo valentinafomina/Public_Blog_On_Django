@@ -1,0 +1,98 @@
+{% extends 'mainapp/base.html' %}
+
+
+
+{% block content %}
+    <div class="h_auth">
+    <h1 class="mt-4">Создание пользователя</h1>
+        </div>
+    {% if messages or form.non_field_errors or form.email.errors or form.password.errors%}
+        <div class="alert
+            {% if messages %} alert-success {% else %} alert-warning {% endif %}
+            alert-dismissible fade show" role="alert"
+                style="margin-top: 50px;">
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% elif form.non_field_errors%}
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            {% elif form.email.errors %}
+                {% for error in form.email.errors %}
+                    {{error}}
+                {% endfor %}
+            {% else %}
+                {% for error in form.password.errors %}
+                    {{error}}
+                {% endfor %}
+            {% endif %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+
+    <div class="auth_form">
+    <form action="{% url 'auth:users_create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">Имя
+                    </label>
+                    <input class="form-control" id="{{ form.first_name.id_for_label }}"  placeholder="Имя">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Фамилия
+                    </label>
+                    <input type="text" class="form-control" id="{{ form.last_name.id_for_label }}"  placeholder="Фамилия">
+                </div>
+                </div>
+
+        <div class="form-row mb-2">
+            <div class="col-lg-6">
+                <div class="custom-file">
+                    <label class="custom-file-label" for="{{ form.avatar.id_for_label }}">Выберите изображение</label>
+                    {{ form.avatar_link }}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="form-row">
+            <div class="col-lg-6">
+                <label for="{{ form.username.id_for_label }}">Имя пользователя
+                    </label>
+            <input type="text" class="form-control" id="{{ form.username.id_for_label }}"  placeholder="Имя">
+            </div>
+            <div class="col-lg-6">
+            <label for="{{ form.email.id_for_label }}">Адрес электронной
+                    почты</label>
+            <input type="email" class="form-control" id="{{ form.email.id_for_label }}" aria-describedby="emailHelp" placeholder="Почта">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-lg-6">
+                <label for="{{ form.password1.id_for_label }}">Пароль
+                </label>
+            <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" placeholder="Пароль">
+            </div>
+            <div class="col-lg-6">
+                <label for="{{ form.password2.id_for_label }}">Подтвердите пароль
+                </label>
+            <input type="password" class="form-control" id="{{ form.password2.id_for_label }}" placeholder="Повторите пароль">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-lg-6" style="margin-top: 33px;">
+                <input class="btn btn-info btn-block" type="submit" value="Сохранить">
+            </div>
+        </div>
+    </form>
+        </form>
+    </div>
+    </div>
+{% endblock %}

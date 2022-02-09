@@ -5,10 +5,11 @@ from .models import Article, Comment
 class CreateArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'category', 'article_text']
+        fields = ['title', 'category', 'article_text', 'is_published']
         labels = {
             'title': 'Введите заголовок',
-            'article_text': "Ваши мысли тут"
+            'article_text': "Ваши мысли тут",
+            'is_published': 'Опубликовать сразу?'
         }
 
     def __init__(self, *args, **kwargs):

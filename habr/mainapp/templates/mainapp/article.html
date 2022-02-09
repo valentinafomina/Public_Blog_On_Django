@@ -1,0 +1,71 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="u-clearfix u-section-1" id="sec-d509">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-1" id="sec-d509">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Снять с публикации</a>
+      </div>
+    </section>
+    <h1>{{article.title}}</h1>
+    <p>Автор {{article.user}}</p>
+    <p>Категория {{article.category}}</p>
+    <p>{{article.article_text}}</p>
+<div class="media-right">
+  <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
+</div>
+
+<div class="tm-separated-list tm-article-presenter__meta-list">
+    <span class="tm-separated-list__title">
+        Тэги:
+    </span>
+    <ul class="tm-separated-list__list">
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+    </ul>
+</div>
+
+ {% if comments %}
+  <div class="row mt-5">
+    <div class="col-lg-6 offset-lg-3">
+      Comment{{ comments.count|pluralize }}
+      <span class="badge badge-dark ml-2">{{ comments.count }}</span>
+    </div>
+    {% for comment in comments %}
+    <div class="col-lg-6 offset-lg-3 mt-2">
+      <div class="card p-2">
+        <div class="row">
+          <div class="col-12">
+            <strong>{{ comment.author }}</strong> said
+          </div>
+          <div class="col-12">
+            <p class="m-1 mt-3">{{ comment.text }}</p>
+            <p class="text-right text-muted"><small>{{ comment.created_at }}</small></p>
+                                  {% if user.is_superuser %}
+              <div class="btn btn-link"><a>Заблокировать комментарий</a></div>
+                                  {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+    {% if user.is_authenticated %}
+        <div class=form-control" style="width: 80%; margin-left: 10%;">
+        <form action="" method="post" class="form-control form-control-lg">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Отправить" class="btn btn-outline-dark" />
+        </form>
+        </div>
+        <h3>{{user}}</h3>
+    {% endif %}
+
+{% endblock %}
