@@ -12,34 +12,7 @@
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
 
+{% include "mainapp/inc/comments.html" %}
 
- {% if comments %}
-  <div class="row mt-5">
-    <div class="col-lg-6 offset-lg-3">
-      Comment{{ comments.count|pluralize }}
-      <span class="badge badge-dark ml-2">{{ comments.count }}</span>
-    </div>
-    {% for comment in comments %}
-    <div class="col-lg-6 offset-lg-3 mt-2">
-      <div class="card p-2">
-        <div class="row">
-          <div class="col-12">
-            <strong>{{ comment.author }}</strong> said
-          </div>
-          <div class="col-12">
-            <p class="m-1 mt-3">{{ comment.text }}</p>
-            <p class="text-right text-muted"><small>{{ comment.created_at }}</small></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
 <h1>{{user}}</h1>
 {% endblock %}
