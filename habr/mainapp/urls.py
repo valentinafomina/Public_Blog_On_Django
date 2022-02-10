@@ -10,6 +10,7 @@ urlpatterns = [
     path('', ArticlesView.as_view(), name='articles'),
     path('category/<int:pk>/', ArticlesView.as_view(), name='category'),
     path('article/<int:pk>/', ArticleView.as_view(), name='article'),
-    path('article/create/', views.ArticleCreateView, name='create_article'),
-    path('about_us/', mainapp.about_us, name='about_us')
+    path('article/create/', ArticleCreateView.as_view(), name='create_article'),
+    path('about_us/', mainapp.about_us, name='about_us'),
+    path('post/<int:post_pk>/comment/reply/<int:pk>', mainapp.CommentReplyView.as_view(), name='comment-reply'),
 ]
