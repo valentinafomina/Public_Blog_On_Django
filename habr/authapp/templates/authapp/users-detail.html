@@ -17,4 +17,8 @@
             <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
             {% endif %}
         </div>
+        <div class="small"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
+    </div>
+
+    {% endif %}
 {% endblock %}

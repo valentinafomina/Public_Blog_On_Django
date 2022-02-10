@@ -24,7 +24,6 @@ urlpatterns = [
     path('', include('mainapp.urls', namespace='main')),
     path('', include('moderation.urls', namespace='mod')),
     path('auth/', include('authapp.urls', namespace='auth')),
-    path('', include('adminapp.urls', namespace='admin')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
