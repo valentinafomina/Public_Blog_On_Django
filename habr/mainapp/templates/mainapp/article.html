@@ -4,20 +4,35 @@
 {% block content %}
     <section class="u-clearfix u-section-1" id="sec-d509">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+        <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-1" id="sec-d509">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Снять с публикации</a>
       </div>
     </section>
     <h1>{{article.title}}</h1>
     <p>Автор {{article.user}}</p>
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
+<div class="tm-separated-list tm-article-presenter__meta-list">
+    <span class="tm-separated-list__title">
+        Тэги:
+    </span>
+    <ul class="tm-separated-list__list">
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+    </ul>
+</div>
 <div class="media-right">
     {% if request.user.is_staff %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
     {% endif %}
 </div>
 
-{% include "mainapp/inc/comments.html" %}
+{% include "mainapp/includes/comments.html" %}
 
 <h1>{{user}}</h1>
 {% endblock %}
