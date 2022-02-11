@@ -20,8 +20,8 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         content = super().get_context_data(**kwargs)
         content['title'] = 'Профиль'
-        content['user'] = User.objects.get(username=self.request.user)
-        if content['user'].id == self.get_object().id:
+        content['user_check'] = User.objects.get(username=self.request.user)
+        if content['user_check'].id == self.get_object().id:
             content['edit_visible'] = 'True'
         else:
             content['edit_visible'] = 'False'
