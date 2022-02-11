@@ -12,7 +12,9 @@
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
 <div class="media-right">
+    {% if request.user.is_staff %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
+    {% endif %}
 </div>
 
 {% include "mainapp/inc/comments.html" %}
