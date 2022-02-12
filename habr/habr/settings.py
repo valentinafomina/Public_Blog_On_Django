@@ -133,6 +133,10 @@ STATICFILES_FINDERS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = "/"
+
+LOGOUT_REDIRECT_URL = "/auth/login/"
+
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
                                "django.core.context_processors.debug",
                                "django.core.context_processors.i18n",
@@ -140,3 +144,5 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
                                "django.core.context_processors.request",
                                "django.core.context_processors.static",
                                "django.template.context_processors.media", )
+
+

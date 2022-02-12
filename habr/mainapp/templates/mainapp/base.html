@@ -80,7 +80,7 @@
 
                             <li class="u-nav-item">
                                 {% if not user.is_authenticated %}
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:login' %}">
+                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:login' %}?next={{request.path}}">
                                     Вход
                                 </a>
                                 {% endif %}
