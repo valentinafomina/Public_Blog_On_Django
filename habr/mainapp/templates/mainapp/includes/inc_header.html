@@ -38,14 +38,14 @@
             <div class="u-custom-menu u-nav-container">
                 <ul class="u-nav u-spacing-20 u-unstyled u-nav-1">
                     <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-green-90 u-text-hover-palette-2-base"
+                        <a class="u-button-style u-nav-link u-text-white"
                         href="/" style="padding: 10px;">
                             Главная
                         </a>
                     </li>
                     <li class="u-nav-item">
                         {% if user.is_authenticated %}
-                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-90 u-text-hover-palette-2-base"
+                        <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
                             href="{% url 'auth:users_detail' user.id %}" style="padding: 10px;">
                             Профиль
                         </a>
@@ -54,7 +54,7 @@
                         <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10 u-nav-2">
                             <li class="u-nav-item">
                                 {% if not user.is_authenticated %}
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:users_create' %}?next={{request.path}}" target="_blank">
+                                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base" href="{% url 'auth:users_create' %}?next={{request.path}}" target="_blank">
                                     Регистрация
                                 </a>
                                 {% endif %}
@@ -62,14 +62,14 @@
 
                             <li class="u-nav-item">
                                 {% if not user.is_authenticated %}
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:login' %}">
+                                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base" href="{% url 'auth:login' %}">
                                     Вход
                                 </a>
                                 {% endif %}
                             </li>
                             {% if user.is_authenticated %}
                             <li class="u-nav-item">
-                                <a class="u-button-style u-nav-link u-white" href="{% url 'auth:logout' %}">
+                                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base" href="{% url 'auth:logout' %}">
                                     Выход
                                 </a>
                             </li>
@@ -77,20 +77,26 @@
                         </ul>
                     </div>
                     </li>
-                    <li class="u-nav-item"><a
-                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-90 u-text-hover-palette-2-base"
-                            href="/about_us" style="padding: 10px;">О нас</a>
+                    <li class="u-nav-item">
+                        <a
+                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
+                            href="/about_us" style="padding: 10px;">О нас
+                        </a>
                     </li>
                     {% if user.is_superuser %}
-                    <li class="u-nav-item"><a
-                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-90 u-text-hover-palette-2-base"
-                            href="/admin" style="padding: 10px;">Админка</a>
+                    <li class="u-nav-item">
+                        <a
+                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
+                            href="/admin" style="padding: 10px;">Админка
+                        </a>
                     </li>
                     {% endif %}
                     {% if user.is_staff %}
-                    <li class="u-nav-item"><a
-                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-90 u-text-hover-palette-2-base"
-                            href="/moderator_page" style="padding: 10px;">Модерация</a>
+                    <li class="u-nav-item">
+                        <a
+                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
+                            href="/moderator_page" style="padding: 10px;">Модерация
+                        </a>
                     </li>
                     {% endif %}
                 </ul>
