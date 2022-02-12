@@ -7,7 +7,7 @@
         <h3 class="mt-4">Личная информация</h3>
         <div class="card mb-4">
             <div class="card-body">
-                    <img height="150" src="{{ MEDIA_URL }}{{ user.avatar_link }}" alt="">
+                    <img height="150" src="{% if user.avatar_link %} {{ user.avatar_link.url }} {% endif %}" alt="">
                     <br>Никнейм: {{ user.username }}
                     <br>Имя: {{ user.first_name }}
                     <br>Фамилия: {{ user.last_name }}
