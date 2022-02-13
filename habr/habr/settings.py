@@ -79,17 +79,24 @@ APPEND_SLASH = True
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'habr',
-         'USER': 'root',
-         'PASSWORD': 'password',
-         'HOST': 'localhost',
-         'PORT': '3306'
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+        # DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.mysql',
+#          'NAME': 'habr',
+#          'USER': 'root',
+#          'PASSWORD': 'password',
+#          'HOST': 'localhost',
+#          'PORT': '3306'
+#      }
+# }
+
+
 
 # Auth model
 AUTH_USER_MODEL = "authapp.User"

@@ -5,6 +5,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_registration.backends.activation.views import RegistrationView
+from django.contrib.auth.views import LoginView
 
 from .models import User
 from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
