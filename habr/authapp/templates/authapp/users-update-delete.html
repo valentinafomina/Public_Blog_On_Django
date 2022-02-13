@@ -44,7 +44,8 @@
         <div class="reg-form-1" style="margin-top: 33px; ">
             <form action="{% url 'auth:users_remove' %}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Удалить" class="btn btn-outline-dark" style="width: 120px;">
+                <button onclick="return confirm('Вы уверенны, что хотите удалить профиль?');" class="btn btn-outline
+                -dark" style="width: 120px;"> Удалить </button>
             </form>
         </div>
     </div>
