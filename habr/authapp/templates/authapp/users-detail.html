@@ -1,24 +1,9 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <h1 class="mt-4">Профиль</h1>
     <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">На главную</a>
     <a href="/article/create" data-page-id="353919755" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать статью</a>
-        <h1 class="mt-4">Профиль</h1>
-        <div class="card mb-4">
-            <div class="card-body">
-                    <img height="150" src="{{ MEDIA_URL }}{{ user.avatar_link }}" alt="">
-                    <br>Никнейм: {{ user.username }}
-                    <br>Имя: {{ user.first_name }}
-                    <br>Фамилия: {{ user.last_name }}
-                    <br>Адрес эл. почты: {{ user.email }}
-            </div>
-            {% if edit_visible == 'True' %}
-            <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
-            {% endif %}
-        </div>
-        <div class="small"><a href="{% url 'auth:users_update' user.id %}">Редактировать</a></div>
-    </div>
+
         <h3 class="mt-4">Личная информация</h3>
         <div class="card mb-4">
             <div class="card-body">
