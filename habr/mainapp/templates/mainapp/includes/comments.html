@@ -1,5 +1,5 @@
 {% load static %}
-
+<div class="" style="width:70%; margin-left:15%">
 {% for comment in comments %}
     {% if comment.is_parent %}
     <div class="row justify-content-center mt-3 mb-5">
@@ -34,7 +34,7 @@
     </div>
 
     {% for child_comment in comment.children %}
-    <div class="row justify-content-center mt-3 mb-5 child-comment">
+    <div class="row justify-content-center mt-3 mb-5 child-comment" style="width:60%; margin-left:20%">
         <div class="col-md-5 col-sm-12 border-bottom">
             <div>
                 <p class="post-text">
@@ -55,3 +55,4 @@
     {{ form }}
     <input type="submit" value="Submit" />
 </form>
+</div>
