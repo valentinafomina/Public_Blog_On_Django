@@ -1,0 +1,57 @@
+{% load static %}
+
+{% for comment in comments %}
+    {% if comment.is_parent %}
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <div>
+                <p class="post-text">
+                    {{ comment.created_at }}
+                </p>
+            </div>
+            <p>{{ comment.text }}</p>
+            <div class="d-flex flex-row">
+                <div>
+                    <button class="remove-default-btn">
+                        <i class="far fa-comment-dots" onclick="commentReplyToggle('{{ comment.pk }}')">
+                            комент к коменту
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3 mb-5 d-none" id="{{ comment.pk }}">
+                <div class="col">
+                    <form method="POST" action="{% url 'mainapp:comment-reply' article.pk comment.pk %}">
+                        {% csrf_token %}
+                        {{ form }}
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-dark">Submit!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for child_comment in comment.children %}
+    <div class="row justify-content-center mt-3 mb-5 child-comment">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <div>
+                <p class="post-text">
+                    {{ child_comment.created_at }}
+                </p>
+            </div>
+            <p>{{ child_comment.text }}</p>
+
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+{% endfor %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Коментарий к статье</p>
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>

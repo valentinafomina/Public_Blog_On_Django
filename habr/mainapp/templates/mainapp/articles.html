@@ -2,40 +2,13 @@
 {% load static %}
 
 {% block content %}
-<!--<ul class="links-menu">-->
-<!--    <li>-->
-<!--        <a href="{% url 'mainapp:category' 2 %}" class="{% if request.resolver_match.kwargs.pk == '0' %}active{% endif %}">-->
-<!--            все-->
-<!--        </a>-->
-<!--    </li>-->
-<!--    {% for link in links_menu %}-->
-<!--        <li>-->
-<!--            <a href="{% url 'mainapp:category' link.pk %}" class="{% if request.resolver_match.kwargs.pk|add:'0' == link.pk %}active{% endif %}">-->
-<!--                {{ link.name }}-->
-<!--            </a>-->
-<!--        </li>-->
-<!--    {% endfor %}-->
-<!--</ul>-->
 
-      <section class="u-clearfix u-section-1" id="sec-5da0">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <ul class="nav justify-content-center">
-          {% for category in categories %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'mainapp:category' category.pk %}">{{ category.name }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </section>
 <div class="container mt-5">
 
   <div class="row">
     {% for article in articles %}
     <div class="card col-lg-6 offset-lg-3 mb-3">
-<!--      {% if post.image %}-->
-<!--      <img class="card-img-top mt-3" src="{{ post.image.url }}" alt="{{ post.title }}">-->
-<!--      {% endif %}-->
+
       <div class="card-body">
         <a>
           <h2 class="card-title my-3">{{ article.title }} </h2>
@@ -43,13 +16,13 @@
         <div class="text-muted mb-3">
           <div>
             <span>created: {{ article.created_date|date:"N j Y" }} |</span>
-<!--            <span>updated: {{ article.updated_on|timesince }} ago |</span>-->
+
             <span>Автор: {{ article.user }}</span>
             <span>Категория: {{ article.category }}</span>
         </div>
         </div>
         <p class="card-text">{{ article.article_text|truncatewords:20 }}</p>
-        <a class='btn btn-primary' href="{% url 'mainapp:article' article.pk %}">Read more ...</a>
+        <a class='btn btn-light' href="{% url 'mainapp:article' article.pk %}">Read more ...</a>
       </div>
     </div>
     {% endfor %}
