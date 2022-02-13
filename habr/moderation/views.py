@@ -18,11 +18,11 @@ class ModeratorPage(ListView):
 
     extra_context = {
         'title': "Список заблокированных вами объектов",
-        'banned_object_name': Article.title,
     }
 
     def get_queryset(self):
-        queryset = super(ModeratorPage, self).get_queryset().order_by('-banned_on')
+        queryset = super(ModeratorPage, self).get_queryset()
+        queryset = queryset.filter(banned_by=self.request.user)
         return queryset
 
 
@@ -34,7 +34,7 @@ def reports(request):
 # @permission_required('moderation.change_article', raise_exception=True)
 def ban_article(request, pk):
     article = Article.objects.get(id=pk)
-    if article.is_banned == False:
+    if not article.is_banned:
         article.is_banned = True
         article.save()
 
@@ -50,7 +50,7 @@ def unban_article(request, pk):
     object = BannedObjects.objects.get(id=pk)
 
     article = Article.objects.get(id=object.banned_object_id)
-    article.is_banned=False
+    article.is_banned = False
     article.save()
 
     object.delete()
@@ -71,8 +71,3 @@ def change_moderator_status(request, pk):
             return redirect('/')
     else:
         return HttpResponseRedirect(request.path_info)
-
-
-
-
-

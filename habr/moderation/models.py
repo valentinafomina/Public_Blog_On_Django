@@ -27,11 +27,12 @@ class BannedObjects(models.Model):
         return ban
 
     def get_object_name(self):
-        object_name = Article.title
+        object_name = self.banned_object.title
         return object_name
 
     def get_object_owner(self):
-        pass
+        author = self.banned_object.user
+        return author
 
 
 class Report(models.Model):
