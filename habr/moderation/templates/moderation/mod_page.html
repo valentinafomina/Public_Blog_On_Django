@@ -12,7 +12,9 @@
     {% for object in object_list %}
     <div>
         <a>
-          <li>{{ object.banned_object}} | Заблокировано: {{object.banned_on }}
+          <li>
+            <a href="/article/{{article.pk}}">{{ object.banned_object}}</a>
+                | Заблокировано: {{object.banned_on }}
           <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разлокировать</a>
           </li>
         </a>
