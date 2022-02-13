@@ -14,7 +14,7 @@
 </div>
     <div style="width:80%; margin-left:10%;">
     <h1>{{article.title}}</h1>
-    <a href="/auth/profile/{{article.user.pk}}">Автор {{article.user}}</a>
+    <a href="{% url 'auth:users_detail' article.user.pk %}">Автор {{article.user}}</a>
     <p>Категория {{article.category}}</p>
     <p style="" >{{article.article_text}}</p>
             <div class="tm-separated-list tm-article-presenter__meta-list">

@@ -13,9 +13,11 @@
     <div>
         <a>
           <li>
-            <a href="/article/{{article.pk}}">{{ object.banned_object}}</a>
-                | Заблокировано: {{object.banned_on }}
-          <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разлокировать</a>
+              <a href="{% url 'mainapp:article' object.banned_object.pk %}" class="link-secondary">{{ object.banned_object }}</a>
+              | Автор:
+              <a href="{% url 'auth:users_detail' object.get_object_owner.id %}" >{{ object.get_object_owner }}</a>
+              | Заблокировано: {{object.banned_on }}
+              <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разблокировать</a>
           </li>
         </a>
     </div>
