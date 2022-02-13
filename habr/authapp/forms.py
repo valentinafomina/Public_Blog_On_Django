@@ -2,9 +2,10 @@ import re
 from urllib import request
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django_registration.forms import RegistrationForm
 from .models import User
 
-class UserRegisterForm(UserCreationForm):
+class UserRegisterForm(RegistrationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Введите имя пользователя'}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
@@ -15,7 +16,7 @@ class UserRegisterForm(UserCreationForm):
         'placeholder': 'Подтвердите пароль'}))
     avatar_link = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
 
-    class Meta:
+    class Meta(RegistrationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 

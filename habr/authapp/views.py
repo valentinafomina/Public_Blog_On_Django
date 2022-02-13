@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django_registration.backends.activation.views import RegistrationView
 
 from .models import User
 from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
@@ -28,7 +29,7 @@ class UserDetailView(DetailView):
         return content
 
 
-class UserCreateView(CreateView):
+class UserCreateView(RegistrationView):
     model = User
     template_name = 'authapp/users-create.html'
     form_class = UserRegisterForm
@@ -45,13 +46,13 @@ class UserCreateView(CreateView):
         if next != '':
             content['next'] = next
         return content
-
+"""
     def get_success_url(self):
         next_url = self.request.GET['next']
         if next_url:
             return next_url
         return reverse_lazy('main:articles')
-
+"""
 
 class UserUpdateView(UpdateView):
     model = User
