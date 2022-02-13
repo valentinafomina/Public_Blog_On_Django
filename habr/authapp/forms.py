@@ -1,10 +1,8 @@
 import re
 from urllib import request
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, \
-    UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from .models import User
-
 
 class UserRegisterForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -15,9 +13,7 @@ class UserRegisterForm(UserCreationForm):
         'placeholder': 'Введите пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
         'placeholder': 'Подтвердите пароль'}))
-    avatar_link = forms.ImageField(
-        widget=forms.FileInput(attrs={'class': 'custom-file-input'}),
-        required=False)
+    avatar_link = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
 
     class Meta:
         model = User
@@ -47,12 +43,11 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError(
                 "Пароль должен содержать не менее 6 символов."
             )
-        elif r'\w' not in password.split() and re.match(pattern,
-                                                        password) is None and (
-                password.isupper() or password.islower()):
+        elif r'\w' not in password.split() and re.match(pattern, password) is None and (password.isupper() or password.islower()):
             raise forms.ValidationError(
                 "Пароль должен содержать строчные латинские буквы в верхнем и нижнем регистрах."
             )
+        
 
 
 class UserProfileForm(UserChangeForm):
@@ -64,13 +59,11 @@ class UserProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name', 'user_about')
-
+        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name')
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control py-4',
-        'placeholder': 'Введите имя пользователя'}))
+        'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control py-4', 'placeholder': 'Введите пароль'}))
 
