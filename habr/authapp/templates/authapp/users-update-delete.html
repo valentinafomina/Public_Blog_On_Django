@@ -19,14 +19,14 @@
                     </div>
                 </div>
                 <div class="reg-form-1">
+                    <label for="{{ form.avatar_link.id_for_label }}" class="form-label mid mb-2">Выберите изображение</label>
+                    <input class="form-control" type="file" id="{{ form.avatar_link }}
+                </div>
+                <div class="reg-form-1">
                     <div class="form-group">
                         <label class="mid mb-1" for="{{ form.user_about.id_for_label }}">Описание</label>
                         <input class="form-control" {{ form.user_about }}
                     </div>
-                </div>
-                <div class="reg-form-1">
-                    <label for="{{ form.avatar_link.id_for_label }}" class="form-label mid mb-2">Выберите изображение</label>
-                    {{ form.avatar_link }}
                 </div>
             </div>
             <div class="reg-form-1">

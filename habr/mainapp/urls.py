@@ -13,5 +13,6 @@ urlpatterns = [
     path('article/create/', ArticleCreateView.as_view(), name='create_article'),
     path('article/delete/<int:pk>/', ArticleDeleteView.as_view(), name='delete_article'),
     path('article/update/<int:pk>/', ArticleUpdateView.as_view(), name='update_article'),
-    path('about_us/', mainapp.about_us, name='about_us')
+    path('about_us/', mainapp.about_us, name='about_us'),
+    path('post/<int:post_pk>/comment/reply/<int:pk>', mainapp.CommentReplyView.as_view(), name='comment-reply'),
 ]

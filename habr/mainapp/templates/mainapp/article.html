@@ -2,47 +2,38 @@
 {% load static %}
 
 {% block content %}
-    <section class="u-clearfix u-section-1" id="sec-d509">
+<div class="container">
+    <div class="u-clearfix u-section-1" id="sec-d509">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+        <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
+        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Снять с публикации</a>
       </div>
-    </section>
+    </div>
+</div>
     <h1>{{article.title}}</h1>
     <p>Автор {{article.user}}</p>
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
+<div class="tm-separated-list tm-article-presenter__meta-list">
+    <span class="tm-separated-list__title">
+        Тэги:
+    </span>
+    <ul class="tm-separated-list__list">
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+        <li class="tm-separated-list__item"></li>
+    </ul>
+</div>
 <div class="media-right">
+    {% if request.user.is_staff %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
+    {% endif %}
 </div>
 
+{% include "mainapp/includes/comments.html" %}
+<p>{{user}}</p>
 
- {% if comments %}
-  <div class="row mt-5">
-    <div class="col-lg-6 offset-lg-3">
-      Comment{{ comments.count|pluralize }}
-      <span class="badge badge-dark ml-2">{{ comments.count }}</span>
-    </div>
-    {% for comment in comments %}
-    <div class="col-lg-6 offset-lg-3 mt-2">
-      <div class="card p-2">
-        <div class="row">
-          <div class="col-12">
-            <strong>{{ comment.author }}</strong> said
-          </div>
-          <div class="col-12">
-            <p class="m-1 mt-3">{{ comment.text }}</p>
-            <p class="text-right text-muted"><small>{{ comment.created_at }}</small></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
-<h1>{{user}}</h1>
+{% include 'mainapp/includes/inc_carousel.html' %}
+
+
 {% endblock %}

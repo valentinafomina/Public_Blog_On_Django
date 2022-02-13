@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
@@ -23,7 +24,7 @@ class ArticlesView(ListView):
 
     def get_queryset(self):
         queryset = super(ArticlesView, self).get_queryset().order_by('-created_date')
-        queryset = queryset.filter(is_published=True, is_banned=False, is_active=True)
+        queryset = queryset.filter(is_published=True, is_banned=False)
         if 'pk' in self.kwargs:
             if self.kwargs['pk'] == 0:
                 return queryset
@@ -121,10 +122,10 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         self.object = self.get_object()
-        if self.object.is_active:
-            self.object.is_active = False
+        if self.object.is_published:
+            self.object.is_published = False
         else:
-            self.object.is_active = True
+            self.object.is_published = True
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -135,3 +136,25 @@ def about_us(request):
     content = {'title': title}
 
     return render(request, 'mainapp/about_us.html', content)
+
+
+class CommentReplyView(LoginRequiredMixin, View):
+    def post(self, request, post_pk, pk, *args, **kwargs):
+        article = Article.objects.get(pk=post_pk)
+        parent_comment = Comment.objects.get(pk=pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.article = article
+            new_comment.parent = parent_comment
+            new_comment.save()
+
+        comments = Comment.objects.filter(article=article).order_by('-created_at')
+        context = {
+            'article': article,
+            'form': form,
+            'comments': comments,
+        }
+        return redirect('mainapp:article', pk=post_pk)
+        # return HttpResponseRedirect('article', pk=post_pk)

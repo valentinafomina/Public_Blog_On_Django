@@ -47,7 +47,6 @@ class Article(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
     is_published = models.BooleanField(default=False, null=True)
     is_banned = models.BooleanField(default=False, null=True)
-    is_active = models.BooleanField(default=True)
     category = models.ForeignKey(ArticleCategory, verbose_name='Категория',
                                  on_delete=models.CASCADE)
 
@@ -66,3 +65,14 @@ class Comment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     text = models.TextField()
     is_banned = models.BooleanField(default=None, null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
+
+    @property
+    def children(self):
+        return Comment.objects.filter(parent=self).order_by('-created_at').all()
+
+    @property
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False
