@@ -41,26 +41,6 @@
  <div class="reg_form_main" style="width: 50%; margin-left: 25%;">
      <div class="form-row">
             <div class="reg-form-1">
-                <div class="form-group">
-                    <label class="mid mb-1" for="{{ form.first_name.id_for_label }}">Имя</label>
-                    <input class="form-control" {{ form.first_name }}
-                </div>
-            </div>
-            <div class="reg-form-1">
-                <div class="form-group">
-                    <label class="mid mb-1" for="{{ form.last_name.id_for_label }}">Фамилия</label>
-                    <input class="form-control" {{ form.last_name }}
-                </div>
-            </div>
-            <div class="reg-form-1">
-                <div class="custom-file">
-                    <div class="mb-3">
-                      <label for="{{ form.avatar.id_for_label }}" class="form-label mid mb-2">Выберите изображение</label>
-                      <input class="form-control" type="file" id="{{ form.avatar.id_for_label }}">
-                    </div>
-                </div>
-            </div>
-            <div class="reg-form-1">
                 <label class="mid mb-1" for="{{ form.username.id_for_label }}">Никнейм</label>
                 <input class="form-control" {{ form.username }}
             </div>
