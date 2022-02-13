@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
+from authapp.models import User
 from mainapp.models import Article
 from .models import BannedObjects
 
@@ -54,6 +56,22 @@ def unban_article(request, pk):
     object.delete()
 
     return redirect('/')
+
+
+def change_moderator_status(request, pk):
+    if request.user.is_superuser:
+        user = User.objects.get(id=pk)
+        if not user.is_staff:
+            user.is_staff = True
+            user.save()
+            return redirect('/')
+        elif user.is_staff:
+            user.is_staff = False
+            user.save()
+            return redirect('/')
+    else:
+        return HttpResponseRedirect(request.path_info)
+
 
 
 
