@@ -6,13 +6,13 @@
         <h3 class="mt-4">Личная информация </h3>
         <div class="card mb-4">
             <div class="card-body">
-                    <img height="150" src="{% if user.avatar_link %} {{ user.avatar_link.url }} {% endif %}" alt="">
-                    <br>Никнейм: {{ user.username }}
-                    <br>Имя: {{ user.first_name }}
-                    <br>Фамилия: {{ user.last_name }}
-                    <br>Адрес эл. почты: {{ user.email }}
+                    <img height="150" src="{% if user_detail.avatar_link %} {{ user_detail.avatar_link.url }} {% endif %}" alt="">
+                    <br>Никнейм: {{ user_detail.username }}
+                    <br>Имя: {{ user_detail.first_name }}
+                    <br>Фамилия: {{ user_detail.last_name }}
+                    <br>Адрес эл. почты: {{ user_detail.email }}
                     <br>Обо мне:
-                    <br>{{user.user_about}}
+                    <br>{{user_detail.user_about}}
             </div>
             {% if edit_visible == 'True' %}
             <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
