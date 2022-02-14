@@ -22,11 +22,15 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         content = super().get_context_data(**kwargs)
         content['title'] = 'Профиль'
-        content['user_check'] = User.objects.get(username=self.request.user)
-        if content['user_check'].id == self.get_object().id:
-            content['edit_visible'] = 'True'
+        if self.request.user.is_authenticated:
+            content['user_check'] = User.objects.get(username=self.request.user)
+            if content['user_check'].id == self.get_object().id:
+                content['edit_visible'] = 'True'
+            else:
+                content['edit_visible'] = 'False'
         else:
             content['edit_visible'] = 'False'
+        print(self.request.user.is_authenticated)
         return content
 
 
