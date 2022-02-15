@@ -44,7 +44,9 @@
                         </a>
                     </li>
                     <li class="u-nav-item">
+
                         {% if user.is_authenticated %}
+
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
                             href="{% url 'auth:users_detail' user.id %}" style="padding: 10px;">
                             Профиль
@@ -62,7 +64,7 @@
 
                             <li class="u-nav-item">
                                 {% if not user.is_authenticated %}
-                                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base" href="{% url 'auth:login' %}">
+                                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base" href="{% url 'auth:login' %}?next={{request.path}}">
                                     Вход
                                 </a>
                                 {% endif %}
