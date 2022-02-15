@@ -18,7 +18,6 @@ class ModeratorPage(ListView):
 
     extra_context = {
         'title': "Список заблокированных вами объектов",
-        'banned_object_name': Article.title,
     }
 
     def get_queryset(self):
@@ -72,8 +71,3 @@ def change_moderator_status(request, pk):
             return redirect('/')
     else:
         return HttpResponseRedirect(request.path_info)
-
-
-
-
-
