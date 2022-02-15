@@ -1,3 +1,10 @@
+.like_btn{
+    display: inline-block;
+
+}
+.dislike_btn{
+    display: inline-block;
+}
 .u-section-1 .u-sheet-1 {
   min-height: 142px;
 }

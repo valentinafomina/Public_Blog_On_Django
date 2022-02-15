@@ -18,7 +18,19 @@
             <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
             {% endif %}
         </div>
+
+    <div class="articles">
+        {% if request.user.pk == article.user.pk or user.is_staff %}
+            {% for user.articles in articles %}
+
+            <h3>{{article.title}}</h3>
+            <p>article.tags</p>
+
+            {% endfor %}
+        {% endif %}
     </div>
+
+
 <div>
     {% if request.user.is_superuser %}
         {% if not user.is_staff%}
