@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import permission_required
 from django.db import models
 from django.shortcuts import redirect
 
-from mainapp.models import Article, Comment
+from mainapp.models import Article
 from authapp.models import User
+
 
 # OBJECT_CHOICES = (
 #     ("COMMENT", "Comment"),
@@ -14,8 +15,9 @@ from authapp.models import User
 # )
 
 
+
 class BannedObjects(models.Model):
-    banned_object = models.ForeignKey(Comment or Article, on_delete=models.CASCADE)
+    banned_object = models.ForeignKey(Article, on_delete=models.CASCADE, primary_key=True)
     banned_by = models.ForeignKey(User, on_delete=models.CASCADE)
     banned_on = models.DateTimeField(blank=True, null=True)
 
@@ -36,6 +38,6 @@ class BannedObjects(models.Model):
 
 
 class Report(models.Model):
-    object = models.ForeignKey(Comment or Article, on_delete=models.CASCADE)
+    object = models.ForeignKey(Article, on_delete=models.CASCADE)
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
     reported_on = models.DateTimeField(blank=True, null=True)

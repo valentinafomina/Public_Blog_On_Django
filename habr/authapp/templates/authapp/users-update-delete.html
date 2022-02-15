@@ -1,4 +1,5 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 
 {% block content %}
     <h1 class="mt-4" xmlns="http://www.w3.org/1999/html">Редактирование пользователя | {{ user.username }}</h1>
@@ -42,7 +43,8 @@
             </div>
         </form>
         <div class="reg-form-1" style="margin-top: 33px; ">
-            <form action="{% url 'auth:users_remove' %}" method="post">
+            <form action="{% url 'auth:users_remove' %}" method="post"
+                  onclick="return confirm('Вы действительно хотите удалить этот аккаунт?')">
                 {% csrf_token %}
                 <input type="submit" value="Удалить" class="btn btn-outline-dark" style="width: 120px;">
             </form>
