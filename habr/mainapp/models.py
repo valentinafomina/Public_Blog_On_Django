@@ -38,7 +38,7 @@ class Article(models.Model):
 
     # Django based user, to be deleted upon creation of custom User model
     # user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200)
     article_text = models.TextField()
@@ -49,13 +49,14 @@ class Article(models.Model):
     is_banned = models.BooleanField(default=False, null=True)
     category = models.ForeignKey(ArticleCategory, verbose_name='Категория',
                                  on_delete=models.CASCADE)
+    likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
 
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
     def __str__(self):
-        return self.title
+        return 'article'
 
 
 class Comment(models.Model):
@@ -66,6 +67,7 @@ class Comment(models.Model):
     text = models.TextField()
     is_banned = models.BooleanField(default=None, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
+    likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
 
     @property
     def children(self):

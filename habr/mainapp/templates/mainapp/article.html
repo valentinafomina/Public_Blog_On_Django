@@ -14,9 +14,15 @@
 </div>
     <div style="width:80%; margin-left:10%;">
     <h1>{{article.title}}</h1>
-    <a href="{% url 'auth:users_detail' article.user.pk %}">Автор {{article.user}}</a>
+    <a href="{% url 'auth:users_detail' article.author.pk %}">Автор {{article.author}}</a>
+                {% if request.user.is_authenticated %}
+                    {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору" %}
+                {% endif %}
     <p>Категория {{article.category}}</p>
     <p style="" >{{article.article_text}}</p>
+            {% if request.user.is_authenticated %}
+                {% include "mainapp/includes/like.html" with model_name="article" model=article text="лайк статье" %}
+            {% endif %}
             <div class="tm-separated-list tm-article-presenter__meta-list">
                 <span class="tm-separated-list__title">
                     Тэги:

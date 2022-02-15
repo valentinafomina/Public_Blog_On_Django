@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -7,8 +7,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from authapp.models import User
 from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
+
+
+class AuthorTestMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user == self.get_object().author
 
 
 class ArticlesView(ListView):
@@ -93,7 +99,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        instance.user = self.request.user
+        instance.author = self.request.user
         instance.save()
         self.object = instance
         self.pk = instance.id
@@ -104,7 +110,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, AuthorTestMixin, UpdateView):
     model = Article
     template_name = 'mainapp/create_article.html'
     form_class = CreateArticleForm
@@ -115,7 +121,7 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
 
-class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+class ArticleDeleteView(LoginRequiredMixin, AuthorTestMixin, DeleteView):
     model = Article
     login_url = '/authenticate/login/'
     success_url = reverse_lazy('mainapp:articles')
@@ -139,8 +145,8 @@ def about_us(request):
 
 
 class CommentReplyView(LoginRequiredMixin, View):
-    def post(self, request, post_pk, pk, *args, **kwargs):
-        article = Article.objects.get(pk=post_pk)
+    def post(self, request, article_pk, pk, *args, **kwargs):
+        article = Article.objects.get(pk=article_pk)
         parent_comment = Comment.objects.get(pk=pk)
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -156,5 +162,27 @@ class CommentReplyView(LoginRequiredMixin, View):
             'form': form,
             'comments': comments,
         }
-        return redirect('mainapp:article', pk=post_pk)
-        # return HttpResponseRedirect('article', pk=post_pk)
+        # return redirect('mainapp:article', pk=article_pk)
+        return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article_pk}))
+
+
+class LikeSwitcher(LoginRequiredMixin, View):
+    def post(self, request, model, pk, *args, **kwargs):
+        models = {
+            'article': Article,
+            'comment': Comment,
+            'user': User,
+        }
+        is_liked = False
+        model_to_liked = models[model].objects.get(pk=pk)
+        for like in model_to_liked.likes.all():
+            if like == request.user:
+                is_liked = True
+                break
+        if is_liked:
+            model_to_liked.likes.remove(request.user)
+        else:
+            model_to_liked.likes.add(request.user)
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
+

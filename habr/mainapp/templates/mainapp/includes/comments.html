@@ -13,6 +13,9 @@
             </div>
             <p>{{ comment.text }}</p>
 <!--            <a href="{% url 'mod:ban_article' comment.pk %}" class="delete">Заблокировать</a>-->
+                        {% if request.user.is_authenticated %}
+            {% include "mainapp/includes/like.html" with model_name="comment" model=comment text="лайк комментарию" %}
+                        {% endif %}
             <div class="d-flex flex-row">
                 <div>
                     <button class="remove-default-btn">
@@ -46,6 +49,9 @@
             </div>
             <p>{{ child_comment.text }}</p>
 <!--            <a href="{% url 'mod:ban_article' child_comment.pk %}" class="delete">Заблокировать</a>-->
+                            {% if request.user.is_authenticated %}
+            {% include "mainapp/includes/like.html" with model_name="comment" model=child_comment text="лайк комментарию" %}
+                            {% endif %}
         </div>
     </div>
     {% endfor %}
