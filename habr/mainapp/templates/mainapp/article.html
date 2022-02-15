@@ -42,12 +42,9 @@
     </div>
 <div class="media-right">
     {% if request.user.is_staff %}
-        {% if article.is_banned == False %}
-    <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
-        {% endif %}
-        {% if article.is_banned == True %}
-    <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Раблокировать</a>
-        {% endif %}
+    {% if not article.is_banned %}
+  <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
+    {% endif %}
     {% endif %}
 </div>
 

@@ -20,7 +20,7 @@
                 </div>
                 <div class="reg-form-1">
                     <label for="{{ form.avatar_link.id_for_label }}" class="form-label mid mb-2">Выберите изображение</label>
-                    <input class="form-control" type="file" id="{{ form.avatar_link }}
+                    {{ form.avatar_link }}
                 </div>
                 <div class="reg-form-1">
                     <div class="form-group">
@@ -45,7 +45,8 @@
             <form action="{% url 'auth:users_remove' %}" method="post"
                   onclick="return confirm('Вы действительно хотите удалить этот аккаунт?')">
                 {% csrf_token %}
-                <input type="submit" value="Удалить" class="btn btn-outline-dark" style="width: 120px;">
+                <button onclick="return confirm('Вы уверенны, что хотите удалить профиль?');" class="btn btn-outline
+                -dark" style="width: 120px;"> Удалить </button>
             </form>
         </div>
     </div>
