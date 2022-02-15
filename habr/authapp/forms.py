@@ -25,13 +25,16 @@ class UserRegisterForm(UserCreationForm):
         password = cleaned_data.get("password1")
         email = cleaned_data.get("email")
         confirm_password = cleaned_data.get("password2")
-        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
 
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError(
                 "Никнейм уже занят."
             )
-        if User.objects.filter(email=email).exists():
+        elif len(username) < 3 or len(username) > 15:
+            raise forms.ValidationError(
+                "Никнейм должен быть больше от 3 до 15 символов."
+            )
+        elif User.objects.filter(email=email).exists():
             raise forms.ValidationError(
                 "Данный email уже зарегистрирован на сайте."
             )
@@ -43,7 +46,7 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError(
                 "Пароль должен содержать не менее 6 символов."
             )
-        elif r'\w' not in password.split() and re.match(pattern, password) is None and (password.isupper() or password.islower()):
+        elif not(re.match(r'[A-Z]', password) and re.match(r'[a-z]', password) and password.isascii()):
             raise forms.ValidationError(
                 "Пароль должен содержать строчные латинские буквы в верхнем и нижнем регистрах."
             )
