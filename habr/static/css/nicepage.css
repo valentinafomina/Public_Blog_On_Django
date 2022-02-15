@@ -5060,7 +5060,7 @@ ol {
           user-select: none;
   vertical-align: middle;
   text-align: center;
-  padding: 10px 30px;
+  padding: 10px 10px;
   border-radius: 0;
   align-self: flex-start;
 }
@@ -18404,6 +18404,34 @@ p {
 }
 .u-align-center {
   text-align: center;
+}
+.l{
+list-style-type: none;
+margin-right: 30px;
+}
+.textcols-item {
+	white-space: normal;
+	display: inline-block;
+	width: 30%;
+	vertical-align: top;
+	font-size: 14px;
+}
+
+.textcols-item_n {
+	white-space: normal;
+	width: 40%;
+	vertical-align: top;
+	font-size: 14px;
+	margin-bottom: 30px;
+}
+
+.st{
+text-align: left;
+margin-left: 20px;
+}
+.t{
+margin-right: 200px;
+margin-left: 200px;
 }
 @media (min-width: 1200px) {
   .u-align-center-xl {

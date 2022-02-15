@@ -99,7 +99,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        instance.author = self.request.user
+        instance.user = self.request.user
         instance.save()
         self.object = instance
         self.pk = instance.id

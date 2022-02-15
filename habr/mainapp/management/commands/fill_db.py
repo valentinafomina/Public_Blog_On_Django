@@ -48,10 +48,3 @@ class Command(BaseCommand):
                                                parent=comment,
                                                )
 
-
-
-
-
-
-
-
