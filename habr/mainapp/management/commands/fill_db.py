@@ -9,6 +9,7 @@ class Command(BaseCommand):
 
         User.objects.all().delete()
         User.objects.create_superuser('admin', 'django@geekshop.local', '123', first_name='Nekr')
+        User.objects.create_user('test', 'test@geekshop.local', '123', first_name='test')
         _user = User.objects.get(first_name='Nekr')
 
         categories = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
@@ -24,7 +25,7 @@ class Command(BaseCommand):
             for j in range(20):
                 category_name = i
                 _category = ArticleCategory.objects.get(name=category_name)
-                new_article = Article.objects.create(user=_user,
+                new_article = Article.objects.create(author=_user,
                                                      title=f'test {i} / {j}',
                                                      article_text='СТАТЬЯ '*20,
                                                      category=_category,
@@ -46,11 +47,4 @@ class Command(BaseCommand):
                                                text=text,
                                                parent=comment,
                                                )
-
-
-
-
-
-
-
 

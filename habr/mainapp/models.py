@@ -53,7 +53,7 @@ class Article(models.Model):
         self.save()
 
     def __str__(self):
-        return self.title
+        return 'article'
 
 
 class Comment(models.Model):
@@ -64,6 +64,7 @@ class Comment(models.Model):
     text = models.TextField()
     is_banned = models.BooleanField(default=None, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
+    likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
 
     @property
     def children(self):
