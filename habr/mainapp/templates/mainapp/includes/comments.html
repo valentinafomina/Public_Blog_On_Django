@@ -1,6 +1,4 @@
 {% load static %}
-    <script type="text/javascript" src="{% static 'js/comments.js' %}"></script>
-
 <div class="" style="width:70%; margin-left:15%">
 {% for comment in comments %}
     {% if comment.is_parent %}
@@ -56,10 +54,7 @@
                 </p>
             </div>
             <p>{{ child_comment.text }}</p>
-<!--            <a href="{% url 'mod:ban_article' child_comment.pk %}" class="delete">Заблокировать</a>-->
-                            {% if request.user.is_authenticated %}
-            {% include "mainapp/includes/like.html" with model_name="comment" model=child_comment text="лайк комментарию" %}
-                            {% endif %}
+
         </div>
     </div>
     {% endfor %}
@@ -70,7 +65,6 @@
     {% csrf_token %}
     <p>Коментарий к статье</p>
     {{ form }}
-
     <input type="submit" value="Submit" />
 </form>
 </div>
