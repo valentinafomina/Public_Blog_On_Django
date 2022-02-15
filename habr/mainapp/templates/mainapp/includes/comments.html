@@ -10,6 +10,13 @@
                 </p>
             </div>
             <p>{{ comment.text }}</p>
+            <form method="POST" action="{% url 'mainapp:like' 'comment' comment.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                    <i class="far fa-thumbs-up"></i> <span>{{ comment.likes.all.count }}</span>
+                </button>
+            </form>
             <div class="d-flex flex-row">
                 <div>
                     <button class="remove-default-btn">
@@ -42,7 +49,13 @@
                 </p>
             </div>
             <p>{{ child_comment.text }}</p>
-
+            <form method="POST" action="{% url 'mainapp:like' 'comment' child_comment.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                    <i class="far fa-thumbs-up"></i> <span>{{ child_comment.likes.all.count }}</span>
+                </button>
+            </form>
         </div>
     </div>
     {% endfor %}
