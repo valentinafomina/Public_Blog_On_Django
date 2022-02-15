@@ -186,3 +186,18 @@ class LikeSwitcher(LoginRequiredMixin, View):
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
 
+
+# class CommentDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Comment
+#     login_url = '/authenticate/login/'
+#     success_url = reverse_lazy('mainapp:article')
+#
+#     def form_valid(self, form):
+#         self.object = self.get_object()
+#         if self.object.is_active:
+#             self.object.is_active = False
+#         else:
+#             self.object.is_active = True
+#         self.object.save()
+#
+#         return HttpResponseRedirect(self.get_success_url())

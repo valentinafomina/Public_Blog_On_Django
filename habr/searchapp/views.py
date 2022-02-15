@@ -20,10 +20,14 @@ class SearchList(View):
             # Поиск по статьям
             query_sets.append(Article.objects.filter(title__contains=q))
             query_sets.append(Article.objects.filter(article_text__contains=q))
+
             # Поиск по пользователям
             query_sets.append(User.objects.filter(username__contains=q))
             query_sets.append(User.objects.filter(first_name__contains=q))
             query_sets.append(User.objects.filter(last_name__contains=q))
+
+            # Поиск по категориям
+            # query_sets.append(Article.objects.filter(category__contains=q))
 
             # Объединение в один
             final_set = list(chain(*query_sets))

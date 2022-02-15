@@ -7,14 +7,16 @@
       <div class="u-clearfix u-sheet u-sheet-1">
         <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
           {% if request.user.pk == article.user.pk or request.user.is_staff %}
-        <a href="{% url 'mainapp:delete_article' article.pk %}" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2" onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')">Снять с публикации</a>
+          <form method="POST" action="{% url 'mainapp:delete_article' article.pk %}" onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
+              <input type="submit" value="Снять с публикации" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">
+          </form>
           {% endif %}
       </div>
     </div>
 </div>
     <div style="width:80%; margin-left:10%;">
     <h1>{{article.title}}</h1>
-    <a href="{% url 'auth:users_detail' article.author.pk %}">Автор {{article.author}}</a>
+    <a href="{% url 'auth:users_detail' article.author.pk %}"> Автор {{article.author}}</a>
                 {% if request.user.is_authenticated %}
                     {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору" %}
                 {% endif %}

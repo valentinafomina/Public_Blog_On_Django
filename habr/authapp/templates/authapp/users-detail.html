@@ -24,14 +24,15 @@
         </div>
 
     <div class="articles">
-        {% if request.user.pk == article.user.pk or user.is_staff %}
-            {% for user.articles in articles %}
+                    {% for articles in articles %}
+        {% if request.user.pk == article.author.pk or user.is_staff %}
+
 
             <h3>{{article.title}}</h3>
             <p>article.tags</p>
 
-            {% endfor %}
         {% endif %}
+            {% endfor %}
     </div>
 
 
