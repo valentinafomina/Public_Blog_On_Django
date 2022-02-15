@@ -56,7 +56,7 @@ class Article(models.Model):
         self.save()
 
     def __str__(self):
-        return 'article'
+        return self.title
 
 
 class Comment(models.Model):
