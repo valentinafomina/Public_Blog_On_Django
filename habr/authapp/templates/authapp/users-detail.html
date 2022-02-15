@@ -1,48 +1,74 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <h1 class="mt-4">Профиль</h1>
     <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">На главную</a>
     <a href="/article/create" data-page-id="353919755" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать статью</a>
-        <h3 class="mt-4">Личная информация</h3>
+        <h3 class="mt-4">Личная информация </h3>
         <div class="card mb-4">
             <div class="card-body">
-                    <img height="150" src="{% if user.avatar_link %} {{ user.avatar_link.url }} {% endif %}" alt="">
-                    <br>Никнейм: {{ user.username }}
-                    <br>Имя: {{ user.first_name }}
-                    <br>Фамилия: {{ user.last_name }}
-                    <br>Адрес эл. почты: {{ user.email }}
+                    <img height="150" src="{% if user_detail.avatar_link %} {{ user_detail.avatar_link.url }} {% endif %}" alt="">
+                    <br>Никнейм: {{ user_detail.username }}
+                    <br>Имя: {{ user_detail.first_name }}
+                    <br>Фамилия: {{ user_detail.last_name }}
+                    <br>Адрес эл. почты: {{ user_detail.email }}
                     <br>Обо мне:
-                    <br>{{user.user_about}}
-            </div>
-            {% if edit_visible == 'True' %}
-            <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
-            {% endif %}
-        </div>
-    </div>
-        <h3 class="mt-4">Личная информация</h3>
-        <div class="card mb-4">
-            <div class="card-body">
-                    <img height="150" src="{% if user.avatar_link %} {{ user.avatar_link.url }} {% endif %}" alt="">
-                    <br>Никнейм: {{ user.username }}
-                    <br>Имя: {{ user.first_name }}
-                    <br>Фамилия: {{ user.last_name }}
-                    <br>Адрес эл. почты: {{ user.email }}
-                    <br>Обо мне:
-                    <br>{{user.user_about}}
+                    <br>{{user_detail.user_about}}
             </div>
             {% if edit_visible == 'True' %}
             <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
             {% endif %}
         </div>
 
+    <div class="articles">
+        {% if request.user.pk == article.user.pk or user.is_staff %}
+            {% for user.articles in articles %}
+
+            <h3>{{article.title}}</h3>
+            <p>article.tags</p>
+
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="textcols-item">
+        <b>Рейтинг</b>
+        <ul>
+            <li class="l">Здесь кол-во лайкосиков на статью</li>&nbsp;
+        </ul>
+    </div>
+</div>
+
+<div class="textcols_n">
+    <div class="textcols-item_n">
+        <b>Название неопубликованной статьи</b>
+        <ul>
+            <li class="l"><a href="#">Здесь название статьи</a></li>
+            <a href="#">ОПУБЛИКОВАТЬ </a>
+            /
+            <a href="#">РЕДАКТИРОВАТЬ</a>
+        </ul>
+    </div>
+</div>
+
+<div class="articles">
+    {% if request.user.pk == article.user.pk or user.is_staff %}
+    {% for user.articles in articles %}
+
+    <h3>{{article.title}}</h3>
+    <p>article.tags</p>
+
+    {% endfor %}
+    {% endif %}
+</div>
+
+
 <div>
     {% if request.user.is_superuser %}
-        {% if not user.is_staff%}
-        <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Назначить модератором</a></div>
-        {% elif user.is_staff and not user.is_superuser %}
-        <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Забрать права модератора</a></div>
-        {% endif %}
+    {% if not user.is_staff%}
+    <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Назначить модератором</a></div>
+    {% elif user.is_staff and not user.is_superuser %}
+    <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Забрать права модератора</a>
+    </div>
+    {% endif %}
     {% endif %}
 </div>
 

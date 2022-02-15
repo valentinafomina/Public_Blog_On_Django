@@ -34,35 +34,35 @@
 
     {% if next %}
         <form action="{% url 'auth:users_create' %}?next={{next}}" method="post" >
-        {%else%}
-            <form action="{% url 'auth:users_create' %}" method="post" enctype="multipart/form-data">
+    {%else%}
+        <form action="{% url 'auth:users_create' %}" method="post" enctype="multipart/form-data">
     {% endif %}
         {% csrf_token %}
- <div class="reg_form_main" style="width: 50%; margin-left: 25%;">
-     <div class="form-row">
-            <div class="reg-form-1">
-                <label class="mid mb-1" for="{{ form.username.id_for_label }}">Никнейм</label>
-                <input class="form-control" {{ form.username }}
+            <div class="reg_form_main" style="width: 50%; margin-left: 25%;">
+                <div class="form-row">
+                    <div class="reg-form-1">
+                        <label class="mid mb-1" for="{{ form.username.id_for_label }}">Никнейм</label>
+                        <input class="form-control" {{ form.username }}
+                    </div>
+                    <div class="reg-form-1">
+                        <label class="mid mb-1" for="{{ form.email.id_for_label }}">Адрес электронной
+                        почты</label>
+                        <input class="form-control" {{ form.email }}
+                    </div>
+                    <div class="reg-form-1">
+                        <label class="mid mb-1" for="{{ form.password1.id_for_label }}">Пароль</label>
+                        <input class="form-control" {{ form.password1 }}
+                    </div>
+                    <div class="reg-form-1>
+                        <label class="mid mb-1" for="{{ form.password2.id_for_label }}">Повторите пароль</label>
+                        <input class="form-control" {{ form.password2 }}
+                    </div>
+                    <div class="reg-form-1" style="margin-top: 33px;">
+                        <input class="btn btn-outline-dark" type="submit" value="Сохранить">
+                    </div>
+                </div>
             </div>
-            <div class="reg-form-1">
-                <label class="mid mb-1" for="{{ form.email.id_for_label }}">Адрес электронной
-                    почты</label>
-                <input class="form-control" {{ form.email }}
-            </div>
-            <div class="reg-form-1">
-                <label class="mid mb-1" for="{{ form.password1.id_for_label }}">Пароль</label>
-                <input class="form-control" {{ form.password1 }}
-            </div>
-            <div class="reg-form-1>
-                <label class="mid mb-1" for="{{ form.password2.id_for_label }}">Повторите пароль</label>
-                <input class="form-control" {{ form.password2 }}
-            </div>
-            <div class="reg-form-1" style="margin-top: 33px;">
-                <input class="btn btn-outline-dark" type="submit" value="Сохранить">
-            </div>
-        </div>
-    </div>
-    </form>
+        </form>
         </form>
 
 

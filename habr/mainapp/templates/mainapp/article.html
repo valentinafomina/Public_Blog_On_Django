@@ -6,35 +6,53 @@
     <div class="u-clearfix u-section-1" id="sec-d509">
       <div class="u-clearfix u-sheet u-sheet-1">
         <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
-        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Снять с публикации</a>
+          {% if request.user.pk == article.user.pk or request.user.is_staff %}
+        <a href="{% url 'mainapp:delete_article' article.pk %}" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2" onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')">Снять с публикации</a>
+          {% endif %}
       </div>
     </div>
 </div>
+    <div style="width:80%; margin-left:10%;">
     <h1>{{article.title}}</h1>
-    <p>Автор {{article.author}}</p>
-    {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору"%}
+    <a href="{% url 'auth:users_detail' article.author.pk %}">Автор {{article.author}}</a>
+                {% if request.user.is_authenticated %}
+                    {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору" %}
+                {% endif %}
+<!--                <div class="like_btn">-->
+<!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>&nbsp;Like-->
+<!--        </a>-->
+<!--    </div>-->
     <p>Категория {{article.category}}</p>
-    <p>{{article.article_text}}</p>
-    {% include "mainapp/includes/like.html" with model_name="article" model=article text="лайк статье"%}
-<div class="tm-separated-list tm-article-presenter__meta-list">
-    <span class="tm-separated-list__title">
-        Тэги:
-    </span>
-    <ul class="tm-separated-list__list">
-        <li class="tm-separated-list__item"></li>
-        <li class="tm-separated-list__item"></li>
-        <li class="tm-separated-list__item"></li>
-    </ul>
+    <p style="" >{{article.article_text}}</p>
+            <div class="tm-separated-list tm-article-presenter__meta-list">
+                <span class="tm-separated-list__title">
+                    Тэги:
+                </span>
+                <ul class="tm-separated-list__list">
+                    <li class="tm-separated-list__item"></li>
+                    <li class="tm-separated-list__item"></li>
+                    <li class="tm-separated-list__item"></li>
+                </ul>
+            </div>
+    </div>
+<div class="like_btn">
+        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>&nbsp;Like
+        </a>
+    </div>
+<div class="dislike_btn">
+        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2"><span class="u-file-icon u-icon"><img src="{% static 'images/126504.png' %}" alt=""></span>&nbsp;DISLike
+        </a>
 </div>
 <div class="media-right">
     {% if request.user.is_staff %}
+    {% if not article.is_banned %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
     {% endif %}
+    {% endif %}
+
 </div>
 
 {% include "mainapp/includes/comments.html" %}
-<p>{{user}}</p>
-
 {% include 'mainapp/includes/inc_carousel.html' %}
 
 
