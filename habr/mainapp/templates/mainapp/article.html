@@ -12,25 +12,10 @@
 </div>
     <h1>{{article.title}}</h1>
     <p>Автор {{article.author}}</p>
-
-    <form method="POST" action="{% url 'mainapp:like' 'user' article.author.pk %}">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.path }}">
-        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
-            лайк пользователю
-            <i class="far fa-thumbs-up"></i> <span>{{ article.author.likes.all.count }}</span>
-        </button>
-    </form>
+    {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору"%}
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
-    <form method="POST" action="{% url 'mainapp:like' 'article' article.pk %}">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.path }}">
-        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
-            лайк статье
-            <i class="far fa-thumbs-up"></i> <span>{{ article.likes.all.count }}</span>
-        </button>
-    </form>
+    {% include "mainapp/includes/like.html" with model_name="article" model=article text="лайк статье"%}
 <div class="tm-separated-list tm-article-presenter__meta-list">
     <span class="tm-separated-list__title">
         Тэги:
