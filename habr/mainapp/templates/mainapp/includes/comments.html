@@ -10,14 +10,18 @@
                 </p>
             </div>
             <p>{{ comment.text }}</p>
-            <div class="like_btn">
-        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>
-        </a>
-    </div>
-<div class="dislike_btn">
-        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2"><span class="u-file-icon u-icon"><img src="{% static 'images/126504.png' %}" alt=""></span>
-        </a>
-</div>
+<!--            <a href="{% url 'mod:ban_article' comment.pk %}" class="delete">Заблокировать</a>-->
+                        {% if request.user.is_authenticated %}
+            {% include "mainapp/includes/like.html" with model_name="comment" model=comment text="лайк комментарию" %}
+                        {% endif %}
+<!--                        <div class="like_btn">-->
+<!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>-->
+<!--        </a>-->
+<!--    </div>-->
+<!--<div class="dislike_btn">-->
+<!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2"><span class="u-file-icon u-icon"><img src="{% static 'images/126504.png' %}" alt=""></span>-->
+<!--        </a>-->
+<!--</div>-->
             <div class="d-flex flex-row">
                 <div>
                     <button class="remove-default-btn">

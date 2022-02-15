@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 <form method="post">
     {% csrf_token %}
     <p>Вы действительно хотите снять с публикации статью "{{ object }}"?</p>
