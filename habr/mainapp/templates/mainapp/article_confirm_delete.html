@@ -4,7 +4,7 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    <p>Вы действительно хотите снять с публикации статью "{{ object }}"?</p>
+    <p>Вы действительно хотите снять с публикации статью "{{ object.title }}"?</p>
     <input type="submit" value="Снять с публикации">
 </form>
 {% endblock %}

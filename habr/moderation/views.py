@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
 from authapp.models import User
-from mainapp.models import Article
+from mainapp.models import Article, Comment
 from .models import BannedObjects
 
 
@@ -18,6 +18,7 @@ class ModeratorPage(ListView):
 
     extra_context = {
         'title': "Список заблокированных вами объектов",
+        'banned_object_name': Article.title,
     }
 
     def get_queryset(self):
@@ -71,3 +72,17 @@ def change_moderator_status(request, pk):
             return redirect('/')
     else:
         return HttpResponseRedirect(request.path_info)
+
+
+# def ban_comment(request, pk):
+#     comment = Comment.objects.get(id=pk)
+#     if not comment.is_banned:
+#         comment.is_banned = True
+#         comment.save()
+#
+#     ban = BannedObjects.create(object_pk=comment, user=request.user)
+#     ban.save()
+#
+#     return HttpResponseRedirect('/')
+#
+

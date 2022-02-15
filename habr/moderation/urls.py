@@ -12,4 +12,4 @@ urlpatterns = [
     path('ban_article/<int:pk>/', ban_article, name='ban_article'),
     path('unban_article/<int:pk>/', unban_article, name='unban_article'),
     path('change_moderator_status/<int:pk>/', change_moderator_status, name='change_moderator_status'),
-               ]
+]
