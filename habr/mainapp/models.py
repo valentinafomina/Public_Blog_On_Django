@@ -50,6 +50,8 @@ class Article(models.Model):
     category = models.ForeignKey(ArticleCategory, verbose_name='Категория',
                                  on_delete=models.CASCADE)
     likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
+    model_name = models.CharField(max_length=12, default='article')
+    tags = models.ManyToManyField('Tag', blank=True, related_name='tagged_articles')
 
     def publish(self):
         self.published_date = timezone.now()
@@ -57,6 +59,22 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+    def create_tags(self):
+        for word in self.article_text.split():
+            if word[0] == '#':
+                try:
+                    tag = Tag.objects.get(name=word[1:])
+                except Tag.DoesNotExist:
+                    tag = None
+
+                if tag:
+                    self.tags.add(tag.pk)
+                else:
+                    tag = Tag(name=word[1:])
+                    tag.save()
+                    self.tags.add(tag.pk)
+                self.save()
 
 
 class Comment(models.Model):
@@ -68,6 +86,7 @@ class Comment(models.Model):
     is_banned = models.BooleanField(default=None, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
     likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
+    model_name = models.CharField(max_length=12, default='comment')
 
     @property
     def children(self):
@@ -78,3 +97,7 @@ class Comment(models.Model):
         if self.parent is None:
             return True
         return False
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=120, unique=True)

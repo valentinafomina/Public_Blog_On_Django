@@ -12,10 +12,10 @@
 </div>
     <h1>{{article.title}}</h1>
     <p>Автор {{article.author}}</p>
-    {% include "mainapp/includes/like.html" with model_name="user" model=article.author text="лайк автору"%}
+    {% include "mainapp/includes/like.html" with model=article.author text="лайк автору"%}
     <p>Категория {{article.category}}</p>
     <p>{{article.article_text}}</p>
-    {% include "mainapp/includes/like.html" with model_name="article" model=article text="лайк статье"%}
+    {% include "mainapp/includes/like.html" with model=article text="лайк статье"%}
 <div class="tm-separated-list tm-article-presenter__meta-list">
     <span class="tm-separated-list__title">
         Тэги:

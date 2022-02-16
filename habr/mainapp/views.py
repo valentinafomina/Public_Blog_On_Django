@@ -98,11 +98,12 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     login_url = '/auth/login/'
 
     def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.user = self.request.user
-        instance.save()
-        self.object = instance
-        self.pk = instance.id
+        article = form.save(commit=False)
+        article.author = self.request.user
+        article.save()
+        self.object = article
+        self.pk = article.pk
+        self.object.create_tags()
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):

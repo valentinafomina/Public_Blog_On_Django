@@ -8,3 +8,4 @@ class User(AbstractUser):
     blocked_time = models.DateTimeField(null=True, blank=True)
     email = models.EmailField(blank=True, unique=True)
     likes = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_likes')
+    model_name = models.CharField(max_length=12, default='user')

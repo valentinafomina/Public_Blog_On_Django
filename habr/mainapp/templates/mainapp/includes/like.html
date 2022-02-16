@@ -1,4 +1,4 @@
-<form method="POST" action="{% url 'mainapp:like' model_name model.pk %}">
+<form method="POST" action="{% url 'mainapp:like' model.model_name model.pk %}">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.path }}">
     <button class="btn btn-secondary" type="submit">
