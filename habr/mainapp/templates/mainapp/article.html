@@ -26,6 +26,9 @@
 <!--    </div>-->
     <p>Категория {{article.category}}</p>
     <p style="" >{{article.article_text}}</p>
+            {% if request.user.is_authenticated %}
+                {% include "mainapp/includes/like.html" with model_name="article" model=article text="лайк статье" %}
+            {% endif %}
             <div class="tm-separated-list tm-article-presenter__meta-list">
                 <span class="tm-separated-list__title">
                     Тэги:
@@ -37,24 +40,17 @@
                 </ul>
             </div>
     </div>
-<div class="like_btn">
-        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>&nbsp;Like
-        </a>
-    </div>
-<div class="dislike_btn">
-        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2"><span class="u-file-icon u-icon"><img src="{% static 'images/126504.png' %}" alt=""></span>&nbsp;DISLike
-        </a>
-</div>
 <div class="media-right">
     {% if request.user.is_staff %}
     {% if not article.is_banned %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
     {% endif %}
     {% endif %}
-
 </div>
 
 {% include "mainapp/includes/comments.html" %}
+<p>{{user}}</p>
+
 {% include 'mainapp/includes/inc_carousel.html' %}
 
 

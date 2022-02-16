@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from mainapp.models import Article
 from authapp.models import User
 
-
 # OBJECT_CHOICES = (
 #     ("COMMENT", "Comment"),
 #     ("USER", "User"),
@@ -15,9 +14,8 @@ from authapp.models import User
 # )
 
 
-
 class BannedObjects(models.Model):
-    banned_object = models.ForeignKey(Article, on_delete=models.CASCADE, primary_key=True)
+    banned_object = models.ForeignKey(Article, on_delete=models.CASCADE)
     banned_by = models.ForeignKey(User, on_delete=models.CASCADE)
     banned_on = models.DateTimeField(blank=True, null=True)
 
