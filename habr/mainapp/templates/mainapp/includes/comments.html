@@ -10,6 +10,13 @@
                 </p>
             </div>
             <p>{{ comment.text }}</p>
+            <div class="media-right">
+    {% if request.user.is_staff %}
+    {% if not article.is_banned %}
+  <a href="{% url 'mod:ban_comment' comment.pk %}" class="delete">Заблокировать комментарий</a>
+    {% endif %}
+    {% endif %}
+</div>
             <div class="d-flex flex-row">
                 <div>
                     <button class="remove-default-btn">
@@ -49,9 +56,9 @@
     {% endif %}
 {% endfor %}
 
-<form action="" method="post">
+<form action="{% url 'mod:report_article' article.pk %}" method="post">
     {% csrf_token %}
     <p>Коментарий к статье</p>
     {{ form }}
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" name="comment"/>
 </form>

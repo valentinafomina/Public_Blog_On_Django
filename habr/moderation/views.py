@@ -1,12 +1,10 @@
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
 from authapp.models import User
-from mainapp.models import Article
-from .models import BannedObjects
+from mainapp.models import Article, Comment
+from .models import BannedObjects, Report
 
 
 class ModeratorPage(ListView):
@@ -17,45 +15,102 @@ class ModeratorPage(ListView):
     context_object_name = 'banned_objects'
 
     extra_context = {
-        'title': "Список заблокированных вами объектов",
+        'title1': "Список заблокированных вами объектов",
+        'title2': "Статьи",
+        'title3': "Комментарии",
+        'title4': "Пользователи",
+        'title5': "Активные заявки на модерацию:",
     }
 
-    def get_queryset(self):
-        queryset = super(ModeratorPage, self).get_queryset()
-        queryset = queryset.filter(banned_by=self.request.user)
-        return queryset
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['article_list'] = BannedObjects.objects.all().filter(
+            banned_comment=None, banned_by=self.request.user)
+        context['comment_list'] = BannedObjects.objects.all().filter(
+            banned_article=None, banned_by=self.request.user)
+        context['reported_articles'] = Report.objects.all().filter(
+            reported_comment=None, is_active=True).order_by('-reported_on')
+        return context
 
 
-@permission_required('moderation.view_report', raise_exception=True)
-def reports(request):
-    return render(request, 'moderation/mod_page.html')
-
-
-# @permission_required('moderation.change_article', raise_exception=True)
-def ban_article(request, pk):
+def report_article(request, pk):
     article = Article.objects.get(id=pk)
-    if not article.is_banned:
-        article.is_banned = True
-        article.save()
 
-        ban = BannedObjects.create(object_pk=article, user=request.user)
-        ban.save()
+    if request.method == 'POST':
+        text = request.POST['text']
 
-        return redirect('moderation:moderator_page')
-    else:
-        return redirect('moderation:moderator_page')
+        if '@moderator' in text:
+            report = Report.create(object_pk=article, user=request.user)
+            print(f'object_pk: {article} user: {request.user}')
+            report.save()
+            return HttpResponseRedirect('/')
+        else:
+            print('wrong!')
+    return HttpResponseRedirect(request.path_info)
+
+
+def mute_report(request, pk):
+    if request.user.is_staff:
+        object = Report.objects.get(id=pk)
+        object.is_active = False
+        object.save()
+    return HttpResponseRedirect(request.path_info)
+
+
+def ban_article(request, pk):
+    if request.user.is_staff:
+        article = Article.objects.get(id=pk)
+        if not article.is_banned:
+            article.is_banned = True
+            article.save()
+
+            ban = BannedObjects.create(object_pk=article, user=request.user)
+            ban.save()
+
+            return redirect('moderation:moderator_page')
+        else:
+            return redirect('moderation:moderator_page')
 
 
 def unban_article(request, pk):
-    object = BannedObjects.objects.get(id=pk)
+    if request.user.is_staff:
+        object = BannedObjects.objects.get(id=pk)
 
-    article = Article.objects.get(id=object.banned_object_id)
-    article.is_banned = False
-    article.save()
+        article = Article.objects.get(id=object.banned_article_id)
+        article.is_banned = False
+        article.save()
 
-    object.delete()
+        object.delete()
 
-    return redirect('/')
+        return redirect('/')
+
+
+def ban_comment(request, pk):
+    if request.user.is_staff:
+        comment = Comment.objects.get(id=pk)
+        if not comment.is_banned:
+            comment.is_banned = True
+            comment.save()
+
+            ban = BannedObjects.create(object_pk=comment, user=request.user)
+            ban.save()
+
+            return redirect('moderation:moderator_page')
+        else:
+            return redirect('moderation:moderator_page')
+
+
+def unban_comment(request, pk):
+    if request.user.is_staff:
+        object = BannedObjects.objects.get(id=pk)
+
+        comment = Comment.objects.get(id=object.banned_comment)
+        comment.is_banned = False
+        comment.save()
+
+        object.delete()
+
+        return redirect('/')
 
 
 def change_moderator_status(request, pk):

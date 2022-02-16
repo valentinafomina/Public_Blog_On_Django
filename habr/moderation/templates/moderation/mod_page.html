@@ -7,15 +7,31 @@
         <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
       </div>
     </section>
-<h3> {{ title }} </h3>
+<h3> {{ title1 }} </h3>
   <div>
-    {% for object in object_list %}
+      <h4> {{ title2 }} </h4>
+    {% for object in article_list %}
     <div>
         <a>
           <li>
-              <a href="{% url 'mainapp:article' object.banned_object.pk %}" class="link-secondary">{{ object.banned_object }}</a>
+              <a href="{% url 'mainapp:article' object.banned_article.pk %}" class="link-secondary">{{ object.banned_article }}</a>
               | Автор:
-              <a href="{% url 'auth:users_detail' object.get_object_owner.id %}" >{{ object.get_object_owner }}</a>
+              <a href="{% url 'auth:users_detail' object.get_article_author.id %}" >{{ object.get_article_author }}</a>
+              | Заблокировано: {{object.banned_on }}
+          <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разлокировать</a>
+          </li>
+        </a>
+    </div>
+    {% endfor %}
+
+            <h4> {{ title3 }} </h4>
+    {% for object in comment_list %}
+    <div>
+        <a>
+          <li>
+<!--          К статье    <a href="{% url 'mainapp:article' object.banned_comment.pk %}" class="link-secondary">{{ object.banned_comment }}</a>-->
+              | Автор:
+              <a href="{% url 'auth:users_detail' object.get_comment_author.id %}" >{{ object.get_comment_author }}</a>
               | Заблокировано: {{object.banned_on }}
           <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разлокировать</a>
           </li>
@@ -23,4 +39,22 @@
     </div>
     {% endfor %}
   </div>
+
+<div>
+    <h5> {{title5}} </h5>
+
+{% for object in reported_articles %}
+    <div>
+        <a>
+          <li>
+          На статью    <a href="{% url 'mainapp:article' object.reported_article.pk %}" class="link-secondary">{{ object.reported_article }}</a>
+              | пожаловался юзер:
+              <a href="{% url 'auth:users_detail' object.reported_by.id %}" >{{ object.reported_by }}</a>
+              | {{object.reported_on }}
+          </li>
+        </a>
+    </div>
+{% endfor %}
+</div>
+
 {% endblock %}
