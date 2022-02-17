@@ -25,6 +25,7 @@ class UserRegisterForm(UserCreationForm):
         password = cleaned_data.get("password1")
         email = cleaned_data.get("email")
         confirm_password = cleaned_data.get("password2")
+        pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
 
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError(
@@ -46,7 +47,8 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError(
                 "Пароль должен содержать не менее 6 символов."
             )
-        elif not(re.match(r'[A-Z]', password) and re.match(r'[a-z]', password) and password.isascii()):
+        elif r'\w' not in password.split() and re.match(pattern, password) is None and (
+                password.isupper() or password.islower()):
             raise forms.ValidationError(
                 "Пароль должен содержать строчные латинские буквы в верхнем и нижнем регистрах."
             )
@@ -62,7 +64,8 @@ class UserProfileForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name')
+        fields = ('username', 'email', 'avatar_link', 'first_name', 'last_name', 'user_about')
+
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
