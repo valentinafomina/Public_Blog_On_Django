@@ -121,6 +121,11 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('mainapp:article', kwargs={'pk': self.pk})
 
+    def form_valid(self, form):
+        self.object.create_tags()
+        self.pk = self.object.pk
+        return super(ArticleUpdateView, self).form_valid(form)
+
 
 class ArticleDeleteView(LoginRequiredMixin, AuthorTestMixin, DeleteView):
     model = Article

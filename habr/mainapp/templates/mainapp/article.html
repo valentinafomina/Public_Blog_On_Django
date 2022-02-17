@@ -26,6 +26,13 @@
         <li class="tm-separated-list__item"></li>
     </ul>
 </div>
+{% if article.tags %}
+    {% for tag in article.tags.all %}
+        <p>
+            {{tag.name}}
+        </p>
+    {% endfor %}
+{% endif %}
 <div class="media-right">
     {% if request.user.is_staff %}
   <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
