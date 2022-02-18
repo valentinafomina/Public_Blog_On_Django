@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 from itertools import chain
@@ -20,15 +21,11 @@ class SearchList(View):
             query_sets = []
 
             # Поиск по статьям
-            query_sets.append(Article.objects.filter(title__contains=q))
-            query_sets.append(Article.objects.filter(article_text__contains=q))
-
+            query_sets.append(Article.objects.search(query=q))
             # Поиск по пользователям
-            query_sets.append(User.objects.filter(username__contains=q))
-            query_sets.append(User.objects.filter(first_name__contains=q))
-            query_sets.append(User.objects.filter(last_name__contains=q))
-            #Поиск по категориям статей
-            query_sets.append(ArticleCategory.objects.filter(name__contains=q))
+            query_sets.append(User.objects.search(query=q))
+            # Поиск по категориям статей
+            query_sets.append(ArticleCategory.objects.search(query=q))
 
             # Объединение в один
             final_set = list(chain(*query_sets))

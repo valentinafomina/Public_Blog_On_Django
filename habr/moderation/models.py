@@ -15,9 +15,8 @@ from authapp.models import User
 # )
 
 
-
 class BannedObjects(models.Model):
-    banned_object = models.OneToOneField(Article, on_delete=models.CASCADE, primary_key=True)
+    banned_object = models.ForeignKey(Article, on_delete=models.CASCADE)
     banned_by = models.ForeignKey(User, on_delete=models.CASCADE)
     banned_on = models.DateTimeField(blank=True, null=True)
 
@@ -33,7 +32,7 @@ class BannedObjects(models.Model):
         return object_name
 
     def get_object_owner(self):
-        author = self.banned_object.author
+        author = self.banned_object.user
         return author
 
 

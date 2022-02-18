@@ -1,5 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
+
+
+class UserManager(models.Manager):
+    use_for_related_fields = True
+
+    def search(self, query=None):
+        qs = self.get_queryset()
+        if query:
+            query = query.casefold()
+            query = query.capitalize()
+            or_lookup = (Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+            qs = qs.filter(or_lookup)
+        return qs
 
 
 class User(AbstractUser):
