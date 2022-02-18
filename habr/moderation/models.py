@@ -32,7 +32,7 @@ class BannedObjects(models.Model):
         return object_name
 
     def get_object_owner(self):
-        author = self.banned_object.user
+        author = self.banned_object.author
         return author
 
 

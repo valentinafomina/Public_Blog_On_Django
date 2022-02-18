@@ -8,11 +8,13 @@
         <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black btn-outline-dark u-btn-1">Вернуться назад</a>
           </div>
         <div class="btn float-right">
+            {% if request.user.is_authenticated %}
           {% if request.user.pk == article.user.pk or request.user.is_staff %}
           <form method="post" action="{% url 'mainapp:delete_article' article.pk %}" onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
               <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Снять с публикации</button>
           </form>
           {% endif %}
+            {% endif %}
       </div>
     </div>
 </div>
