@@ -1,11 +1,14 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-    <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">На главную</a>
-    <a href="/article/create" data-page-id="353919755" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать статью</a>
+    <div class="u-clearfix u-section-1 ">
+        <a href="/" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">На главную</a>
+        <a href="/article/create" data-page-id="353919755" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать статью</a>
+    </div>
         <h3 class="mt-4">Личная информация </h3>
         <div class="card mb-4">
             <div class="card-body">
+                    <p class="mt-4">Рейтинг пользователя: сколько-то лайкосиков </p>
                     <img height="150" src="{% if user_detail.avatar_link %} {{ user_detail.avatar_link.url }} {% endif %}" alt="">
                     <br>Никнейм: {{ user_detail.username }}
                     <br>Имя: {{ user_detail.first_name }}
@@ -30,6 +33,23 @@
         {% endif %}
             {% endfor %}
     </div>
+
+<div class="textcols">
+    <div class="textcols-item">
+        <b>Название опубликованной статьи</b>
+        <ul>
+            <li class="l"><a href="#">Здесь название статьи</a></li>
+            <a href="#">РЕДАКТИРОВАТЬ </a>
+            /
+            <a href="#">СНЯТЬ С ПУБЛИКАЦИИ</a>
+        </ul>
+    </div>
+    <div class="textcols-item">
+        <b>Комментарии</b>
+        <ul>
+            <li class="l">Здесь кол-во комментов на статью</li>&nbsp;
+        </ul>
+    </div>
     <div class="textcols-item">
         <b>Рейтинг</b>
         <ul>
@@ -48,6 +68,17 @@
             <a href="#">РЕДАКТИРОВАТЬ</a>
         </ul>
     </div>
+</div>
+
+<div class="articles">
+    {% if request.user.pk == article.user.pk or user.is_staff %}
+    {% for user.articles in articles %}
+
+    <h3>{{article.title}}</h3>
+    <p>article.tags</p>
+
+    {% endfor %}
+    {% endif %}
 </div>
 
 <div class="articles">

@@ -48,7 +48,7 @@ def ban_article(request, pk):
 
 
 def unban_article(request, pk):
-    object = BannedObjects.objects.get(banned_object_id=pk)
+    object = BannedObjects.objects.get(id=pk)
 
     article = Article.objects.get(id=object.banned_object_id)
     article.is_banned = False
