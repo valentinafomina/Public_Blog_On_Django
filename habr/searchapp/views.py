@@ -6,6 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mainapp.models import Article, ArticleCategory
 from authapp.models import User
 
+
 class SearchList(View):
     template_name = 'searchapp/search_results.html'
     paginate_by = 100
