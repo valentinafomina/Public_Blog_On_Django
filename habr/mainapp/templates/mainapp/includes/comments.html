@@ -1,4 +1,6 @@
 {% load static %}
+    <script type="text/javascript" src="{% static 'js/comments.js' %}"></script>
+
 <div class="" style="width:70%; margin-left:15%">
     {% for comment in comments %}
     {% if comment.is_parent %}

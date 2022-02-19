@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from mainapp.models import Article
 from authapp.models import User
 
-
 # OBJECT_CHOICES = (
 #     ("COMMENT", "Comment"),
 #     ("USER", "User"),
