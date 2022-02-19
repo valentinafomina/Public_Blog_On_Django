@@ -1,8 +1,7 @@
 {% extends 'mainapp/base.html' %}
 
 {% block content %}
-<h1>результаты поиска по {{ search_name }}</h1>
-
+    <h1>результаты поиска по «{{ search_name }}»</h1>
     {% if object_list %}
         {% for object in object_list %}
             {% if object.title %}
