@@ -26,6 +26,7 @@ urlpatterns = [
     path('auth/', include('authapp.urls', namespace='auth')),
     path('', include('django_registration.backends.activation.urls')),
     path('', include('django.contrib.auth.urls')),
+    path('search/', include('searchapp.urls', namespace='search')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
