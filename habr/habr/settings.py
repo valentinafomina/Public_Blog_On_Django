@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'authapp',
+    'searchapp',
     'adminapp',
     'moderation',
     'userprofile',
     'habr',
+    'django_registration',
 ]
 
 MIDDLEWARE = [
@@ -74,17 +76,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'habr.wsgi.application'
 
+APPEND_SLASH = True
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# DATABASES = {
+        # DATABASES = {
 #      'default': {
 #          'ENGINE': 'django.db.backends.mysql',
 #          'NAME': 'habr',
@@ -93,7 +95,9 @@ DATABASES = {
 #          'HOST': 'localhost',
 #          'PORT': '3306'
 #      }
-#  }
+# }
+
+
 
 # Auth model
 AUTH_USER_MODEL = "authapp.User"
@@ -115,6 +119,18 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
+
+# для отправки кода активации
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'info@google.ru'
+
+#Days for activation account by email 
+ACCOUNT_ACTIVATION_DAYS = 3
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -146,3 +162,5 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
                                "django.core.context_processors.request",
                                "django.core.context_processors.static",
                                "django.template.context_processors.media", )
+
+

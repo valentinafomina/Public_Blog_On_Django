@@ -15,5 +15,4 @@ urlpatterns = [
     path('unban_article/<int:pk>/', unban_article, name='unban_article'),
     path('unban_comment/<int:pk>/', unban_comment, name='unban_comment'),
     path('change_moderator_status/<int:pk>/', change_moderator_status, name='change_moderator_status'),
-    path('report_article/<int:pk>/', report_article, name='report_article'),
-               ]
+]

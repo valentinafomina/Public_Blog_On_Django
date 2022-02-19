@@ -1,22 +1,25 @@
 {% load static %}
+    <script type="text/javascript" src="{% static 'js/comments.js' %}"></script>
 
-{% for comment in comments %}
+<div class="" style="width:70%; margin-left:15%">
+    {% for comment in comments %}
     {% if comment.is_parent %}
     <div class="row justify-content-center mt-3 mb-5">
         <div class="col-md-5 col-sm-12 border-bottom">
             <div>
                 <p class="post-text">
-                    {{ comment.created_at }}
+                    {{ comment.author}}
+                </p>
+                <p class="post-text">
+                    {{ comment.created_at|date:"d.m.Y" }}  {{ comment.created_at|time:"H:i" }}
                 </p>
             </div>
             <p>{{ comment.text }}</p>
-            <div class="media-right">
-    {% if request.user.is_staff %}
-    {% if not article.is_banned %}
-  <a href="{% url 'mod:ban_comment' comment.pk %}" class="delete">Заблокировать комментарий</a>
-    {% endif %}
-    {% endif %}
-</div>
+            <!--            <a href="{% url 'mod:ban_article' comment.pk %}" class="delete">Заблокировать</a>-->
+            {% if request.user.is_authenticated %}
+                {% include "mainapp/includes/like.html" with model=comment text="лайк комментарию" %}
+            {% endif %}
+
             <div class="d-flex flex-row">
                 <div>
                     <button class="remove-default-btn">
@@ -32,7 +35,7 @@
                         {% csrf_token %}
                         {{ form }}
                         <div class="d-grid gap-2">
-                            <button class="btn btn-outline-dark">Submit!</button>
+                            <button class="btn btn-outline-dark">Отправить</button>
                         </div>
                     </form>
                 </div>
@@ -40,25 +43,28 @@
         </div>
     </div>
 
-    {% for child_comment in comment.children %}
-    <div class="row justify-content-center mt-3 mb-5 child-comment">
-        <div class="col-md-5 col-sm-12 border-bottom">
-            <div>
-                <p class="post-text">
-                    {{ child_comment.created_at }}
-                </p>
+        {% for child_comment in comment.children %}
+        <div class="row justify-content-center mt-3 mb-5 child-comment" style="width:60%; margin-left:20%">
+            <div class="col-md-5 col-sm-12 border-bottom">
+                <div>
+                    <p class="post-text">
+                        {{ child_comment.created_at }}
+                    </p>
+                </div>
+                <p>{{ child_comment.text }}</p>
+                {% if request.user.is_authenticated %}
+                    {% include "mainapp/includes/like.html" with model=child_comment text="лайк комментарию" %}
+                {% endif %}
             </div>
-            <p>{{ child_comment.text }}</p>
-
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
     {% endif %}
-{% endfor %}
+    {% endfor %}
 
-<form action="{% url 'mod:report_article' article.pk %}" method="post">
-    {% csrf_token %}
-    <p>Коментарий к статье</p>
-    {{ form }}
-    <input type="submit" value="Submit" name="comment"/>
-</form>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Коментарий к статье</p>
+        {{ form }}
+        <input type="submit" value="Submit"/>
+    </form>
+</div>

@@ -51,8 +51,8 @@ class BannedObjects(models.Model):
         author = self.banned_article.user
         return author
 
-    def get_comment_author(self):
-        author = self.banned_comment.author
+    def get_object_owner(self):
+        author = self.banned_object.author
         return author
 
 
