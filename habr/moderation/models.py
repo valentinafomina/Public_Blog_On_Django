@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from mainapp.models import Article
 from authapp.models import User
 
+
 # OBJECT_CHOICES = (
 #     ("COMMENT", "Comment"),
 #     ("USER", "User"),
@@ -27,11 +28,12 @@ class BannedObjects(models.Model):
         return ban
 
     def get_object_name(self):
-        object_name = Article.title
+        object_name = self.banned_object.title
         return object_name
 
     def get_object_owner(self):
-        pass
+        author = self.banned_object.author
+        return author
 
 
 class Report(models.Model):

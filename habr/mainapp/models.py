@@ -3,6 +3,33 @@ from django.db import models
 from django.utils import timezone
 
 from authapp.models import User
+from django.db.models import Q
+
+
+# class ArticleManager(models.Manager):
+#     use_for_related_fields = True
+#
+#     def search(self, query=None):
+#         qs = self.get_queryset()
+#         if query:
+#             query = query.casefold()
+#             query = query.capitalize()
+#             or_lookup = (Q(title__icontains=query) | Q(article_text__icontains=query))
+#             qs = qs.filter(or_lookup)
+#         return qs
+
+
+class ArticleCategoryManager(models.Manager):
+    use_for_related_fields = True
+
+    def search(self, query=None):
+        qs = self.get_queryset()
+        if query:
+            query = query.casefold()
+            query = query.capitalize()
+            or_lookup = (Q(name__icontains=query))
+            qs = qs.filter(or_lookup)
+        return qs
 
 
 class ArticleCategory(models.Model):
@@ -19,6 +46,7 @@ class ArticleCategory(models.Model):
         default=True,
         verbose_name='активный'
     )
+    # objects = ArticleCategoryManager()
 
     def __str__(self):
         return self.name
@@ -39,7 +67,6 @@ class Article(models.Model):
     # Django based user, to be deleted upon creation of custom User model
     # user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-
     title = models.CharField(max_length=200)
     article_text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
@@ -52,6 +79,7 @@ class Article(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
     model_name = models.CharField(max_length=12, default='article')
     tags = models.ManyToManyField('Tag', blank=True, related_name='tagged_articles')
+    # objects = ArticleManager()
 
     def publish(self):
         self.published_date = timezone.now()

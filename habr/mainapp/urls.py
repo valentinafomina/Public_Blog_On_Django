@@ -3,6 +3,7 @@ from django.urls import path
 import mainapp.views as mainapp
 from .views import ArticlesView, ArticleView, ArticleCreateView, ArticleUpdateView, ArticleDeleteView, LikeSwitcher
 
+
 app_name = 'mainapp'
 
 urlpatterns = [
