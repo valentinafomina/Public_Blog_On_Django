@@ -6,7 +6,10 @@
         <div class="col-md-5 col-sm-12 border-bottom">
             <div>
                 <p class="post-text">
-                    {{ comment.created_at }}
+                    {{ comment.author}}
+                </p>
+                <p class="post-text">
+                    {{ comment.created_at|date:"d.m.Y" }}  {{ comment.created_at|time:"H:i" }}
                 </p>
             </div>
             <p>{{ comment.text }}</p>
@@ -30,7 +33,7 @@
                         {% csrf_token %}
                         {{ form }}
                         <div class="d-grid gap-2">
-                            <button class="btn btn-outline-dark">Submit!</button>
+                            <button class="btn btn-outline-dark">Отправить</button>
                         </div>
                     </form>
                 </div>

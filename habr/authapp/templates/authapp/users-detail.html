@@ -67,6 +67,17 @@
     {% endif %}
 </div>
 
+<div class="articles">
+    {% if request.user.pk == article.user.pk or user.is_staff %}
+    {% for user.articles in articles %}
+
+    <h3>{{article.title}}</h3>
+    <p>article.tags</p>
+
+    {% endfor %}
+    {% endif %}
+</div>
+
 
 <div>
     {% if request.user.is_superuser %}

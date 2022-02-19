@@ -3,6 +3,7 @@
     <input type="hidden" name="next" value="{{ request.path }}">
     <button class="btn btn-secondary" type="submit">
         {{ text }}
-        <i class="far fa-thumbs-up"></i> <span>{{ model.likes.all.count }}</span>
+        <i class="far fa-thumbs-up"></i> <span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""> {{ model.likes.all.count }}</span>
     </button>
+    </div>
 </form>
