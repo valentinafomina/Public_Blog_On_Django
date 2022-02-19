@@ -2,21 +2,28 @@
 {% load static %}
 
 {% block content %}
-    <section class="u-clearfix u-section-1" id="sec-d509">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="#" data-page-id="752105316" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться назад</a>
-      </div>
-    </section>
+<section class="u-clearfix u-section-1" id="sec-d509">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="/" data-page-id="752105316"
+           class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1">Вернуться
+            назад</a>
+    </div>
+</section>
 <h3> {{ title }} </h3>
-  <div>
+<div>
     {% for object in object_list %}
     <div>
         <a>
-          <li>{{ object.banned_object}} | {{object.banned_by}} | {{object.banned_on }}
-          <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разлокировать</a>
-          </li>
+            <li>
+                <a href="{% url 'mainapp:article' object.banned_object.pk %}" class="link-secondary">
+                    {{ object.banned_object }}</a>
+                | Автор:
+                <a href="{% url 'auth:users_detail' object.get_object_owner.id %}">{{ object.get_object_owner }}</a>
+                | Заблокировано: {{object.banned_on }}
+                <a href="{% url 'mod:unban_article' object.pk %}" class="delete">Разблокировать</a>
+            </li>
         </a>
     </div>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}

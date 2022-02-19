@@ -9,6 +9,7 @@ class Command(BaseCommand):
 
         User.objects.all().delete()
         User.objects.create_superuser('admin', 'django@geekshop.local', '123', first_name='Nekr')
+        User.objects.create_user('test', 'test@geekshop.local', '123', first_name='test')
         _user = User.objects.get(first_name='Nekr')
 
         categories = ['Дизайн', 'Веб-разработка', 'Мобильная разработка', 'Маркетинг']
@@ -24,9 +25,9 @@ class Command(BaseCommand):
             for j in range(20):
                 category_name = i
                 _category = ArticleCategory.objects.get(name=category_name)
-                new_article = Article.objects.create(user=_user,
+                new_article = Article.objects.create(author=_user,
                                                      title=f'test {i} / {j}',
-                                                     article_text='test'*20,
+                                                     article_text='СТАТЬЯ '*20,
                                                      category=_category,
                                                      is_published=True,
                                                      )
@@ -34,13 +35,16 @@ class Command(BaseCommand):
                 for _ in range(5):
                     article = new_article
                     author = _user
-                    text = 'test' * 10
-                    Comment.objects.create(article=article,
-                                           author=author,
-                                           text=text
-                                           )
-
-
-
-
+                    text = 'КОММЕНТАРИЙ ' * 10
+                    comment = Comment.objects.create(article=article,
+                                                     author=author,
+                                                     text=text
+                                                     )
+                    for _ in range(2):
+                        text = 'комментарий к комментарию'
+                        Comment.objects.create(article=article,
+                                               author=author,
+                                               text=text,
+                                               parent=comment,
+                                               )
 

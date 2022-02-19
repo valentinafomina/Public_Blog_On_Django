@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django_registration.backends.activation.views import RegistrationView
 from django.contrib.auth.views import LoginView
 
 from .models import User
@@ -21,15 +22,21 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         content = super().get_context_data(**kwargs)
         content['title'] = 'Профиль'
-        content['user_check'] = User.objects.get(username=self.request.user)
-        if content['user_check'].id == self.get_object().id:
-            content['edit_visible'] = 'True'
+        content['user'] = self.request.user
+        content['user_detail'] = self.get_object()
+
+        if self.request.user.is_authenticated:
+            content['user_check'] = User.objects.get(username=self.request.user)
+            if content['user_check'].id == self.get_object().id:
+                content['edit_visible'] = 'True'
+            else:
+                content['edit_visible'] = 'False'
         else:
             content['edit_visible'] = 'False'
         return content
 
 
-class UserCreateView(CreateView):
+class UserCreateView(RegistrationView):
     model = User
     template_name = 'authapp/users-create.html'
     form_class = UserRegisterForm
@@ -46,13 +53,13 @@ class UserCreateView(CreateView):
         if next != '':
             content['next'] = next
         return content
-
+"""
     def get_success_url(self):
         next_url = self.request.GET['next']
         if next_url:
             return next_url
         return reverse_lazy('main:articles')
-
+"""
 
 class UserUpdateView(UpdateView):
     model = User
