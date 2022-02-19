@@ -1,3 +1,5 @@
+from django.db.models import Q, Value
+from django.db.models.functions import Lower, Replace
 from django.shortcuts import render
 from django.views import View
 from itertools import chain
@@ -18,16 +20,12 @@ class SearchList(View):
         context['search_name'] = q
         if q:
             query_sets = []
-
-            # Поиск по статьям
-            query_sets.append(Article.objects.filter(title__contains=q))
-            query_sets.append(Article.objects.filter(article_text__contains=q))
-            # Поиск по пользователям
-            query_sets.append(User.objects.filter(username__contains=q))
-            query_sets.append(User.objects.filter(first_name__contains=q))
-            query_sets.append(User.objects.filter(last_name__contains=q))
-            #Поиск по категориям статей
-            query_sets.append(ArticleCategory.objects.filter(name__contains=q))
+            q = q.capitalize()
+            query_sets = search(query_sets, q)
+            q = q.lower()
+            query_sets = search(query_sets, q)
+            q = q.upper()
+            query_sets = search(query_sets, q)
 
             # Объединение в один
             final_set = list(chain(*query_sets))
@@ -43,3 +41,16 @@ class SearchList(View):
                 context['object_list'] = current_page.page(current_page.num_pages)
 
         return render(request=request, template_name=self.template_name, context=context)
+
+
+def search(query_sets, q):
+    # Поиск по статьям
+    query_sets.append(Article.objects.filter(title__icontains=q))
+    query_sets.append(Article.objects.filter(article_text__icontains=q))
+    # Поиск по пользователям
+    query_sets.append(User.objects.filter(username__icontains=q))
+    query_sets.append(User.objects.filter(first_name__icontains=q))
+    query_sets.append(User.objects.filter(last_name__icontains=q))
+    # Поиск по категориям статей
+    query_sets.append(ArticleCategory.objects.filter(name__icontains=q))
+    return query_sets
