@@ -3,41 +3,70 @@ from django.shortcuts import render
 from django.views import View
 from itertools import chain
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.views.generic import ListView
 
 from mainapp.models import Article, ArticleCategory
 from authapp.models import User
 
 
-class SearchList(View):
-    template_name = 'searchapp/search_results.html'
+class SearchArticleList(ListView):
+    model = Article
     paginate_by = 100
+    template_name = 'searchapp/search_article_results.html'
+    extra_context = {
+        'title': 'Habr',
+        'categories': ArticleCategory.objects.all(),
+    }
 
-    def get(self, request, *args, **kwargs):
-        context = {}
+    def get_context_data(self, **kwargs):
+        context = context = super(SearchArticleList, self).get_context_data(**kwargs)
 
-        q = request.GET.get('search')
+        q = self.request.GET.get('search')
+        sort = self.request.GET.getlist('sort')
         context['search_name'] = q
         if q:
-            query_sets = []
 
-            # Поиск по статьям
-            query_sets.append(Article.objects.search(query=q))
-            # Поиск по пользователям
-            query_sets.append(User.objects.search(query=q))
-            # Поиск по категориям статей
-            query_sets.append(ArticleCategory.objects.search(query=q))
+            queryset = Article.objects.filter(Q(title__icontains=q.capitalize()) | Q(title__icontains=q.lower())
+                                        | Q(title__icontains=q.upper()) | Q(article_text__icontains=q.capitalize())
+                                        | Q(article_text__icontains=q.lower()) | Q(article_text__icontains=q.upper()))
 
-            # Объединение в один
-            final_set = list(chain(*query_sets))
+            if sort:
+                queryset = queryset.order_by(*sort)
+            else:
+                queryset.order_by('-likes')
 
-            current_page = Paginator(final_set, 100)
+            context['articles'] = queryset
 
-            page = request.GET.get('page')
-            try:
-                context['object_list'] = current_page.page(page)
-            except PageNotAnInteger:
-                context['object_list'] = current_page.page(1)
-            except EmptyPage:
-                context['object_list'] = current_page.page(current_page.num_pages)
+        return context
 
-        return render(request=request, template_name=self.template_name, context=context)
+
+class SearchUserList(ListView):
+    model = User
+    paginate_by = 100
+    template_name = 'searchapp/search_user_results.html'
+    extra_context = {
+        'title': 'Habr',
+    }
+
+    def get_context_data(self, **kwargs):
+        context = context = super(SearchUserList, self).get_context_data(**kwargs)
+
+        q = self.request.GET.get('search')
+        sort = self.request.GET.getlist('sort')
+        context['search_name'] = q
+        if q:
+
+            queryset = User.objects.filter(
+                Q(username__icontains=q.capitalize()) | Q(username__icontains=q.lower())
+                | Q(username__icontains=q.upper()) | Q(first_name__icontains=q.capitalize())
+                | Q(first_name__icontains=q.lower()) | Q(first_name__icontains=q.upper())
+                | Q(last_name__icontains=q.lower()) | Q(last_name__icontains=q.upper())
+                | Q(last_name__icontains=q.lower())
+            )
+
+            if sort:
+                queryset = queryset.order_by(*sort)
+
+            context['users'] = queryset
+
+        return context
