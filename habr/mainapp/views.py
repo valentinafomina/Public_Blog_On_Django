@@ -129,7 +129,7 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorTestMixin, UpdateView):
 
 class ArticleDeleteView(LoginRequiredMixin, AuthorTestMixin, DeleteView):
     model = Article
-    login_url = '/authenticate/login/'
+    login_url = '/auth/login/'
     success_url = reverse_lazy('mainapp:articles')
 
     def form_valid(self, form):
@@ -173,6 +173,12 @@ class CommentReplyView(LoginRequiredMixin, View):
 
 
 class LikeSwitcher(LoginRequiredMixin, View):
+    login_url = '/auth/login/'
+
+    def handle_no_permission(self):
+        self.request.path = self.request.path.replace('/like', '')
+        return super(LikeSwitcher, self).handle_no_permission()
+
     def post(self, request, model, pk, *args, **kwargs):
         models = {
             'article': Article,
