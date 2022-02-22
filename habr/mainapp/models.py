@@ -6,19 +6,6 @@ from authapp.models import User
 from django.db.models import Q
 
 
-# class ArticleManager(models.Manager):
-#     use_for_related_fields = True
-#
-#     def search(self, query=None):
-#         qs = self.get_queryset()
-#         if query:
-#             query = query.casefold()
-#             query = query.capitalize()
-#             or_lookup = (Q(title__icontains=query) | Q(article_text__icontains=query))
-#             qs = qs.filter(or_lookup)
-#         return qs
-
-
 class ArticleCategoryManager(models.Manager):
     use_for_related_fields = True
 
@@ -69,7 +56,7 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     article_text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now)
+    created_date = models.DateTimeField(default=timezone.now())
     updated_at = models.DateTimeField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     is_published = models.BooleanField(default=False, null=True)
@@ -79,7 +66,6 @@ class Article(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
     model_name = models.CharField(max_length=12, default='article')
     tags = models.ManyToManyField('Tag', blank=True, related_name='tagged_articles')
-    # objects = ArticleManager()
 
     def publish(self):
         self.published_date = timezone.now()

@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count, QuerySet, Q
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -84,9 +85,19 @@ class ArticleView(DetailView):
         return self.render_to_response(context=context)
 
     def get_same_articles(self):
-        category = self.object.category
-        same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
-        return same_articles
+        if self.object.tags:
+            same_articles = None
+            for tag in self.object.tags.all():
+                same_tag_articles = tag.tagged_articles.all().annotate(cnt=Count('likes'))
+                if same_articles:
+                    same_articles = same_articles.union(same_tag_articles)
+                else:
+                    same_articles = same_tag_articles
+        else:
+            category = self.object.category
+            same_articles = self.model.objects.filter(category=category).annotate(cnt=Count('likes'))
+
+        return same_articles.order_by('-cnt')[:5]
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -191,19 +202,3 @@ class LikeSwitcher(LoginRequiredMixin, View):
             model_to_liked.likes.add(request.user)
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
-
-
-# class CommentDeleteView(LoginRequiredMixin, DeleteView):
-#     model = Comment
-#     login_url = '/authenticate/login/'
-#     success_url = reverse_lazy('mainapp:article')
-#
-#     def form_valid(self, form):
-#         self.object = self.get_object()
-#         if self.object.is_active:
-#             self.object.is_active = False
-#         else:
-#             self.object.is_active = True
-#         self.object.save()
-#
-#         return HttpResponseRedirect(self.get_success_url())
