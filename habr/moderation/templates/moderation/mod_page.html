@@ -15,8 +15,8 @@
     <div>
         <a>
             <li>
-                <a href="{% url 'mainapp:article' object.banned_object.pk %}" class="link-secondary">{{
-                    object.banned_object }}</a>
+                <a href="{% url 'mainapp:article' object.banned_object.pk %}" class="link-secondary">
+                    {{ object.banned_object }}</a>
                 | Автор:
                 <a href="{% url 'auth:users_detail' object.get_object_owner.id %}">{{ object.get_object_owner }}</a>
                 | Заблокировано: {{object.banned_on }}
