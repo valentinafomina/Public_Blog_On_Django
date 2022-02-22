@@ -35,9 +35,9 @@
     <!--    </div>-->
     <p>Категория {{article.category}}</p>
     <p style="">{{article.article_text}}</p>
-    {% if request.user.is_authenticated %}
-        {% include "mainapp/includes/like.html" with model=article text="лайк статье"%}
-    {% endif %}
+{#    {% if request.user.is_authenticated %}#}
+        {% include "mainapp/includes/like.html" with model=article text="лайк статье" %}
+{#    {% endif %}#}
     <!--            <div class="tm-separated-list tm-article-presenter__meta-list">-->
     <!--                <span class="tm-separated-list__title">-->
     <!--                    Тэги:-->

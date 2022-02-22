@@ -56,7 +56,7 @@
     {% endif %}
     {% endfor %}
 
-    <form action="" method="post">
+     <form method="POST" action="{% url 'mainapp:comment' article.pk %}">
         {% csrf_token %}
         <p>Коментарий к статье</p>
         {{ form }}

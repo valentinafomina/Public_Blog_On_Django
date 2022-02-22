@@ -17,6 +17,7 @@ from django.db.models import Q
 #             or_lookup = (Q(title__icontains=query) | Q(article_text__icontains=query))
 #             qs = qs.filter(or_lookup)
 #         return qs
+from mainapp.mixins import ModelClassNameMixin
 
 
 class ArticleCategoryManager(models.Manager):
@@ -56,7 +57,7 @@ class ArticleCategory(models.Model):
         return queryset
 
 
-class Article(models.Model):
+class Article(models.Model, ModelClassNameMixin):
     # CATEGORY_CHOICES = (
     #     ("DESIGN", "Design"),
     #     ("WEB_DEV", "Web Development"),
@@ -77,7 +78,6 @@ class Article(models.Model):
     category = models.ForeignKey(ArticleCategory, verbose_name='Категория',
                                  on_delete=models.CASCADE)
     likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
-    model_name = models.CharField(max_length=12, default='article')
     tags = models.ManyToManyField('Tag', blank=True, related_name='tagged_articles')
     # objects = ArticleManager()
 
@@ -105,7 +105,7 @@ class Article(models.Model):
                 self.save()
 
 
-class Comment(models.Model):
+class Comment(models.Model, ModelClassNameMixin):
     # author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
@@ -114,7 +114,6 @@ class Comment(models.Model):
     is_banned = models.BooleanField(default=None, null=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
     likes = models.ManyToManyField(User, blank=True, related_name='comment_likes')
-    model_name = models.CharField(max_length=12, default='comment')
 
     @property
     def children(self):

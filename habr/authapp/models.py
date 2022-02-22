@@ -1,7 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
-
+from django.db import models
+from mainapp.mixins import ModelClassNameMixin
 
 # class UserManager(models.Manager):
 #     use_for_related_fields = True
@@ -15,12 +15,11 @@ from django.db.models import Q
 #             qs = qs.filter(or_lookup)
 #         return qs
 
-
-class User(AbstractUser):
+class User(AbstractUser, ModelClassNameMixin):
     user_about = models.CharField(max_length=1024, blank=True)
     avatar_link = models.ImageField(upload_to='users_images', blank=True)
     blocked_time = models.DateTimeField(null=True, blank=True)
     email = models.EmailField(blank=True, unique=True)
     likes = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_likes')
-    model_name = models.CharField(max_length=12, default='user')
+    is_banned = models.BooleanField(default=False)
     # objects = UserManager()
