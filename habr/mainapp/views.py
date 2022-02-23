@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Count
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -45,6 +46,12 @@ class ArticlesView(ListView):
         else:
             return queryset
 
+    def get_top_users(self):
+        pass
+
+    def get_top_articles(self):
+        pass
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ArticleView(DetailView):
@@ -66,10 +73,24 @@ class ArticleView(DetailView):
         comments = Comment.objects.filter(article__pk=self.kwargs['pk'])
         return comments
 
+    # def get_same_articles(self):
+    #     category = self.object.category
+    #     same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
+    #     return same_articles
     def get_same_articles(self):
-        category = self.object.category
-        same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
-        return same_articles
+        if self.object.tags:
+            same_articles = None
+            for tag in self.object.tags.all():
+                same_tag_articles = tag.tagged_articles.all().annotate(cnt=Count('likes'))
+                if same_articles:
+                    same_articles = same_articles.union(same_tag_articles)
+                else:
+                    same_articles = same_tag_articles
+        else:
+            category = self.object.category
+            same_articles = self.model.objects.filter(category=category).annotate(cnt=Count('likes'))
+
+        return same_articles.order_by('-cnt')[:5]
 
 
 @method_decorator(csrf_exempt, name='dispatch')
