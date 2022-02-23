@@ -1,9 +1,16 @@
-{% load static %}
 <form method="POST" action="{% url 'mainapp:like' model.model_name model.pk %}">
     {% csrf_token %}
-    <input type="hidden" name="next" value="{{ request.path }}">
-    <button class="btn btn-secondary" type="submit">
-        {{ text }}
-        <i class="far fa-thumbs-up"></i> <span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""> {{ model.likes.all.count }}</span>
-    </button>
+    <div class="d-flex flex-row align-items-center">
+        <div class="col">
+<div>
+<!--        <p class="small text-muted mb-0">{{ text }}</p>-->
+<button class="btn btn-link btn-xs" type="submit" name="next" value="{{ request.path }}">
+    <i class="fas fa-thumbs-up mx-1 fa-s text-muted"></i>
+    <span class="small text-muted mb-0">{{ model.likes.all.count }}</span>
+</button>
+    </div>
+
+    </div>
+        </div>
 </form>
+

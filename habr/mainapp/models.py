@@ -58,7 +58,7 @@ class Article(models.Model, ModelClassNameMixin):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')
     title = models.CharField(max_length=200)
     article_text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now())
+    created_date = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     is_published = models.BooleanField(default=False, null=True)

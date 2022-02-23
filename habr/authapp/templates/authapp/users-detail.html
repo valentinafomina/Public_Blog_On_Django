@@ -9,6 +9,16 @@
        class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2">Создать
         статью</a>
 </div>
+<div class="u-align-center">
+{% if user_detail.is_banned %}
+{% if not request.user == user_detail %}
+<h4 class="mt-4"> Юзер заблокирован </h4>
+{% elif request.user == user_detail %}
+<h4 class="mt-4"> Вы заблокированы </h4>
+<a > Это значит, вы не можете оставлять комментарии и публиковать статьи в течение 2 недель </a>
+{% endif %}
+{% endif %}
+
 <h3 class="mt-4">Личная информация </h3>
 <div class="card mb-4">
     <div class="card-body">
@@ -36,7 +46,7 @@
     {% endif %}
     {% endfor %}
 </div>
-<div class="textcols-item">
+<div >
     <b>Рейтинг</b>
     <ul>
         <li class="l">Здесь кол-во лайкосиков на статью</li>&nbsp;
@@ -44,12 +54,14 @@
 </div>
 
 
-<div class="textcols_n ">
-    <div class="textcols-item_n">
+<div >
+    <div >
         <b>Название неопубликованной статьи</b>
         <ul>
             <li class="l"><a href="#">Здесь название статьи</a></li>
+            {% if not user_detail.is_staff and not user_detail.is_banned %}
             <a href="#">ОПУБЛИКОВАТЬ </a>
+            {% endif %}
             /
             <a href="#">РЕДАКТИРОВАТЬ</a>
         </ul>
@@ -70,13 +82,13 @@
 
 <div>
     {% if request.user.is_superuser %}
-    {% if not user.is_staff%}
+    {% if not user_detail.is_staff and not user_detail.is_banned %}
     <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Назначить модератором</a></div>
-    {% elif user.is_staff and not user.is_superuser %}
+    {% elif user_detail.is_staff and not user_detail.is_superuser %}
     <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Забрать права модератора</a>
     </div>
     {% endif %}
     {% endif %}
 </div>
-
+</div>
 {% endblock %}

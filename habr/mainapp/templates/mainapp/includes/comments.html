@@ -1,68 +1,143 @@
 {% load static %}
-<div class="" style="width:70%; margin-left:15%">
-    {% for comment in comments %}
-    {% if comment.is_parent %}
-    <div class="row justify-content-center mt-3 mb-5">
-        <div class="col-md-5 col-sm-12 border-bottom">
-            <div>
-                <p class="post-text">
-                    {{ comment.author}}
-                </p>
-                <p class="post-text">
-                    {{ comment.created_at|date:"d.m.Y" }}  {{ comment.created_at|time:"H:i" }}
-                </p>
-            </div>
-            <p>{{ comment.text }}</p>
-            <!--            <a href="{% url 'mod:ban_article' comment.pk %}" class="delete">Заблокировать</a>-->
-            {% if request.user.is_authenticated %}
-                {% include "mainapp/includes/like.html" with model=comment text="лайк комментарию" %}
-            {% endif %}
 
-            <div class="d-flex flex-row">
-                <div>
-                    <button class="remove-default-btn">
-                        <i class="far fa-comment-dots" onclick="commentReplyToggle('{{ comment.pk }}')">
-                            комент к коменту
-                        </i>
-                    </button>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-3 mb-5 d-none" id="{{ comment.pk }}">
-                <div class="col">
-                    <form method="POST" action="{% url 'mainapp:comment-reply' article.pk comment.pk %}">
-                        {% csrf_token %}
-                        {{ form }}
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-outline-dark">Отправить</button>
+<section>
+    <div class="container my-5 py-5">
+
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-8">
+
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h4 class="text-center mb-4 pb-2">Комментарии</h4>
+                        <div class="row">
+                            <div class="col">
+                                {% for comment in comments %}
+                                {% if comment.is_parent %}
+                                <div class="d-flex flex-start">
+                                    <img
+                                            class="rounded-circle shadow-1-strong me-3"
+                                            src="{% if comment.author.avatar_link %} {{ comment.author.avatar_link.url }} {% endif %}"
+                                            alt="avatar"
+                                            width="65"
+                                            height="65"
+                                    />
+                                    <div class="flex-grow-1 flex-shrink-1">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <p class="mb-1">
+                                                    <a class="link-dark" href="{% url 'auth:users_detail' comment.author.pk %}">{{ comment.author }} </a>
+                                                    <span class="small text-align left">написал {{ comment.created_at }}</span>
+                                                </p>
+
+                                            </div>
+                                            <p class="small mb-0 u-align-left">
+                                                {{ comment.text }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                    {% include "mainapp/includes/like.html" with model=comment text="лайк комментарию" %}
+                                    {% endif %}
+
+                                    {% if request.user.is_staff %}
+                                    {% if not article.is_banned %}
+                                    <form method="POST" action="{% url 'mod:ban' model='comment' pk=comment.pk %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-link btn-xs" type="submit" name="next" value="{{ request.path }}">
+                                            <i class="fas fa-ban text-muted"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    {% endif %}
+
+                                </div>
+                                <div align="right">
+                                    <button class="btn btn-link">
+                                        <i class="fas fa-reply fa-xs" onclick="commentReplyToggle('{{ comment.pk }}')">
+                                            Ответить
+                                        </i>
+                                    </button>
+                                </div>
+                                <div class="row justify-content-center mt-3 mb-5 d-none" id="{{ comment.pk }}">
+                                    <div class="col">
+                                        <form method="POST" action="{% url 'mainapp:comment-reply' article.pk comment.pk %}">
+                                            {% csrf_token %}
+                                            {{ form }}
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-outline-dark">Отправить</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                                {% for child_comment in comment.children %}
+                                <div class="d-flex flex-end mt-4 ms-5">
+                                    <a class="me-3 ml-5" href="#">
+                                        <img
+                                                class="rounded-circle shadow-1-strong"
+                                                src="{% if comment.author.avatar_link %} {{ comment.author.avatar_link.url }} {% endif %}"
+                                                alt="avatar"
+                                                width="65"
+                                                height="65"
+                                        />
+                                    </a>
+                                    <div class="flex-grow-1 flex-shrink-1">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <p class="mb-1">
+                                                    <a class="link-dark" href="{% url 'auth:users_detail' child_comment.author.pk %}">
+                                                        {{ child_comment.author }}</a> <span class="small "> ответил {{ child_comment.created_at}} </span>
+                                                </p>
+                                            </div>
+                                            <p class="small mb-0 u-align-left">
+                                                {{ child_comment.text }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div align="top">
+                                        {% if request.user.is_authenticated %}
+                                        {% include "mainapp/includes/like.html" with model=child_comment text="лайк комментарию" %}
+                                        {% endif %}
+
+                                    </div>
+                                    <div align="top">
+                                        {% if request.user.is_staff %}
+                                        {% if not article.is_banned %}
+                                        <form method="POST" action="{% url 'mod:ban' model='comment' pk=comment.pk %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-link btn-xs" type="submit" name="next" value="{{ request.path }}">
+                                                <i class="fas fa-ban text-muted"></i>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        {% endif %}
+
+                                    </div>
+
+
+
+
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+
+                            </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
+                <form method="POST" action="{% url 'mainapp:comment' article.pk %}">
+                    {% csrf_token %}
+                    <p></p>
+                    {{ form }}
+                    <input type="submit" value="Отправить"/>
+                </form>
             </div>
+
+
         </div>
     </div>
+</section>
 
-        {% for child_comment in comment.children %}
-        <div class="row justify-content-center mt-3 mb-5 child-comment" style="width:60%; margin-left:20%">
-            <div class="col-md-5 col-sm-12 border-bottom">
-                <div>
-                    <p class="post-text">
-                        {{ child_comment.created_at }}
-                    </p>
-                </div>
-                <p>{{ child_comment.text }}</p>
-                {% if request.user.is_authenticated %}
-                    {% include "mainapp/includes/like.html" with model=child_comment text="лайк комментарию" %}
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    {% endif %}
-    {% endfor %}
-
-     <form method="POST" action="{% url 'mainapp:comment' article.pk %}">
-        {% csrf_token %}
-        <p>Коментарий к статье</p>
-        {{ form }}
-        <input type="submit" value="Submit"/>
-    </form>
-</div>

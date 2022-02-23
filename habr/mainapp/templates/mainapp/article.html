@@ -2,81 +2,118 @@
 {% load static %}
 
 {% block content %}
-<div class="">
-    <div class="">
-        <div class="btn float-left">
-            <a href="/" data-page-id="752105316"
-               class="u-border-2 u-border-black u-btn u-button-style u-hover-black btn-outline-dark u-btn-1">Вернуться
-                назад</a>
-        </div>
-        <div class="btn float-right">
-            {% if request.user.is_authenticated %}
-                {% if request.user.pk == article.user.pk or request.user.is_staff %}
-                <form method="post" action="{% url 'mainapp:delete_article' article.pk %}"
-                      onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
-                    <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Снять с
-                        публикации
-                    </button>
-                </form>
-                {% endif %}
-            {% endif %}
-        </div>
-    </div>
-</div>
-<div style="width:80%; margin-left:10%;">
-    <h1>{{article.title}}</h1>
-    <a href="{% url 'auth:users_detail' article.author.pk %}"> Автор {{article.author}}</a>
+
+<div class="container my-5 py-5">
+
+  <!-- Nav buttons -->
+  <div class="u-clearfix u-section-1 ">
+    <a href="/" data-page-id="752105316"
+       class="u-border-2 u-border-black u-btn u-button-style u-hover-black btn-outline-dark u-btn-1">
+      Вернуться назад</a>
     {% if request.user.is_authenticated %}
-        {% include "mainapp/includes/like.html" with model=article.author text="лайк автору" %}
+    {% if request.user.pk == article.user.pk or request.user.is_staff %}
+    <form method="post" action="{% url 'mainapp:delete_article' article.pk %}"
+          onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
+      <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Снять с
+        публикации
+      </button>
+    </form>
     {% endif %}
-    <!--                <div class="like_btn">-->
-    <!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>&nbsp;Like-->
-    <!--        </a>-->
-    <!--    </div>-->
-    <p>Категория {{article.category}}</p>
-    <p style="">{{article.article_text}}</p>
-{#    {% if request.user.is_authenticated %}#}
-        {% include "mainapp/includes/like.html" with model=article text="лайк статье" %}
-{#    {% endif %}#}
-    <!--            <div class="tm-separated-list tm-article-presenter__meta-list">-->
-    <!--                <span class="tm-separated-list__title">-->
-    <!--                    Тэги:-->
-    <!--                </span>-->
-    <!--                <ul class="tm-separated-list__list">-->
-    <!--                    <li class="tm-separated-list__item"></li>-->
-    <!--                    <li class="tm-separated-list__item"></li>-->
-    <!--                    <li class="tm-separated-list__item"></li>-->
-    <!--                </ul>-->
-    <!--            </div>-->
-</div>
-<!--<div class="like_btn">-->
-<!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-1"><span class="u-file-icon u-icon"><img src="{% static 'images/126473.png' %}" alt=""></span>&nbsp;Like-->
-<!--        </a>-->
-<!--    </div>-->
-<!--<div class="dislike_btn">-->
-<!--        <a href="#" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-text-black u-text-hover-white u-btn-2"><span class="u-file-icon u-icon"><img src="{% static 'images/126504.png' %}" alt=""></span>&nbsp;DISLike-->
-<!--        </a>-->
-<!--</div>-->
+    {% endif %}
+  </div>
+
+
+  <div class="row d-flex justify-content-center">
+    <div class="card px-3 pt-3" style="max-width: 60rem">
+      <!-- Статья -->
+      <div>
+        <!-- Фото -->
+        <div class="bg-image hover-overlay shadow-1-strong ripple rounded-5 mb-4"
+             data-mdb-ripple-color="light">
+          <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/113.webp" class="img-fluid" />
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+
+        <!-- Данные о статье -->
+        <div class="row mb-3">
+          <div class="col-4 text-start">
+            {{article.category}}
+          </div>
+
+          <div class="col-4 text-center">
+            <a href="" class="text-info">
+              <u> {{ article.author }}</u>
+            </a>
+          </div>
+
+          <div class="col-4 text-end">
+            <u> {{ article.created_date }}</u>
+          </div>
+        </div>
+
+        <!-- Заголовок и текст -->
+        <br>
+        <div class="text-dark u-align-center">
+          <h5>{{article.title}}</h5></div>
+
+        <p class="ms-4 fs-5 lh-lg u-body text-muted d-block">
+          {{ article.article_text}}
+        </p>
+
+      </div>
+      <!-- Тэги -->
+      <div class="card-body">
+        <div class="d-flex justify-content-between ">
 {% if article.tags %}
     {% for tag in article.tags.all %}
-    <p>
+    <p class="ms-4 fs-5 lh-lg u-body text-muted d-block">
         {{tag.name}}
     </p>
     {% endfor %}
 {% endif %}
-<div class="media-right">
-    {% if request.user.is_staff %}
-        {% if not article.is_banned %}
-        <a href="{% url 'mod:ban_article' article.pk %}" class="delete">Заблокировать</a>
-        {% endif %}
-    {% endif %}
+        </div>
+      </div>
+      <!-- Тэги -->
 
+      <!-- Реакции -->
+      <div class="card-body">
+        <div class="d-flex justify-content-between ">
+
+          <div>
+            <p class="text-muted">{{ comments.all.count }} комментариев </p>
+          </div>
+          <div >
+            <div >
+                {#    {% if request.user.is_authenticated %}#}
+              {% include "mainapp/includes/like.html" with model=article text="лайк статье"%}
+            {#    {% endif %}#}
+            </div>
+
+            <div >
+              {% if request.user.is_staff %}
+              {% if not article.is_banned %}
+              <form method="POST" action="{% url 'mod:ban' model='article' pk=article.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-link btn-xs" type="submit" name="next" value="{{ request.path }}">
+                  <i class="fas fa-ban text-muted"></i>
+                </button>
+              </form>
+              {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Реакции -->
+
+    </div>
+  </div>
 </div>
 
-{% include "mainapp/includes/comments.html" %}
-<p>{{user}}</p>
+  {% include "mainapp/includes/comments.html" %}
 
-{% include 'mainapp/includes/inc_carousel.html' %}
+  {% include 'mainapp/includes/inc_carousel.html' %}
 
-
-{% endblock %}
+  {% endblock %}

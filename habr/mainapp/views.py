@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from authapp.models import User
+from moderation.models import Report
 from .forms import CommentForm, CreateArticleForm
 from .models import ArticleCategory, Article, Comment
 
@@ -75,7 +76,8 @@ class ArticleView(DetailView):
         return context
 
     def get_comments(self):
-        comments = Comment.objects.filter(article__pk=self.kwargs['pk'])
+        comments = Comment.objects.filter(article__pk=self.kwargs['pk'],
+                                          is_banned=None)
         return comments
 
     # def get_same_articles(self):
@@ -83,7 +85,7 @@ class ArticleView(DetailView):
     #     same_articles = self.model.objects.filter(category=category).order_by('-created_date')[:5]
     #     return same_articles
     def get_same_articles(self):
-        if self.object.tags:
+        if self.object.tags.count() > 0:
             same_articles = None
             for tag in self.object.tags.all():
                 same_tag_articles = tag.tagged_articles.all().annotate(cnt=Count('likes'))
@@ -167,6 +169,7 @@ class CommentView(LoginRequiredMixin, BanTestMixin, View):
         article = Article.objects.get(pk=pk)
 
         if form.is_valid():
+            text = form.cleaned_data['text']
             new_comment = form.save(commit=False)
             new_comment.author = request.user
             new_comment.article = article
@@ -178,6 +181,9 @@ class CommentView(LoginRequiredMixin, BanTestMixin, View):
                 'form': form,
                 'comments': comments,
             }
+            if '@moderator' in text:
+                report = Report.create(object_pk=article, user=request.user)
+                report.save()
             return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article.pk}))
 
 
@@ -188,11 +194,15 @@ class CommentReplyView(LoginRequiredMixin, BanTestMixin, View):
         parent_comment = Comment.objects.get(pk=pk)
         form = CommentForm(request.POST)
         if form.is_valid():
+            text = form.cleaned_data['text']
             new_comment = form.save(commit=False)
             new_comment.author = request.user
             new_comment.article = article
             new_comment.parent = parent_comment
             new_comment.save()
+            if '@moderator' in text:
+                report = Report.create(object_pk=parent_comment, user=request.user)
+                report.save()
 
         comments = Comment.objects.filter(article=article).order_by('-created_at')
         context = {
