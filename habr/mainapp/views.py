@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -23,6 +23,16 @@ class BanTestMixin(UserPassesTestMixin):
         return not self.request.user.is_banned
 
 
+def get_top10_articles():
+    top10_articles = Article.objects.annotate(cnt=Count('likes')).order_by('-cnt')[:5]
+    return top10_articles
+
+def get_top10_users():
+    top10_users = User.objects.annotate(total_articles_likes=Sum('articles__likes')).annotate(
+        total_comments_likes=Sum('comments__likes')).annotate(total_user_likes=Count('likes')).annotate(total_rating='')
+    pass
+
+
 class ArticlesView(ListView):
     model = Article
     ordering = '-created_date'
@@ -32,6 +42,7 @@ class ArticlesView(ListView):
     extra_context = {
         'title': 'Habr',
         'categories': ArticleCategory.objects.all(),
+        'top10_articles': get_top10_articles(),
     }
 
     def get_queryset(self):
@@ -45,12 +56,6 @@ class ArticlesView(ListView):
                 return queryset
         else:
             return queryset
-
-    def get_top_users(self):
-        pass
-
-    def get_top_articles(self):
-        pass
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -208,9 +213,9 @@ class LikeSwitcher(LoginRequiredMixin, BanTestMixin, View):
 
     def post(self, request, model, pk, *args, **kwargs):
         models = {
-            'Article': Article,
-            'Comment': Comment,
-            'User': User,
+            Article.__name__: Article,
+            Comment.__name__: Comment,
+            User.__name__: User,
         }
         is_liked = False
         model_to_liked = models[model].objects.get(pk=pk)
