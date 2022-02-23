@@ -5,6 +5,8 @@ from django.utils import timezone
 from authapp.models import User
 from django.db.models import Q
 
+from mainapp.mixins import ModelClassNameMixin
+
 
 class ArticleCategoryManager(models.Manager):
     use_for_related_fields = True
