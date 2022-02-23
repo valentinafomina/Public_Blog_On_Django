@@ -131,6 +131,7 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorTestMixin, UpdateView):
         return super(ArticleUpdateView, self).form_valid(form)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ArticleDeleteView(LoginRequiredMixin, AuthorTestMixin, DeleteView):
     model = Article
     login_url = '/auth/login/'
@@ -154,6 +155,7 @@ def about_us(request):
     return render(request, 'mainapp/about_us.html', content)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CommentView(LoginRequiredMixin, BanTestMixin, View):
     def post(self, request, pk, *args, **kwargs):
         form = CommentForm(request.POST)
@@ -174,6 +176,7 @@ class CommentView(LoginRequiredMixin, BanTestMixin, View):
             return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article.pk}))
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CommentReplyView(LoginRequiredMixin, BanTestMixin, View):
     def post(self, request, article_pk, pk, *args, **kwargs):
         article = Article.objects.get(pk=article_pk)
@@ -195,6 +198,7 @@ class CommentReplyView(LoginRequiredMixin, BanTestMixin, View):
         return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article_pk}))
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LikeSwitcher(LoginRequiredMixin, BanTestMixin, View):
     login_url = '/auth/login/'
 
