@@ -1,19 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Q
-from django.db import models
-from mainapp.mixins import ModelClassNameMixin
-
-# class UserManager(models.Manager):
-#     use_for_related_fields = True
-#
-#     def search(self, query=None):
-#         qs = self.get_queryset()
-#         if query:
-#             query = query.casefold()
-#             query = query.capitalize()
-#             or_lookup = (Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
-#             qs = qs.filter(or_lookup)
-#         return qs
 
 class User(AbstractUser, ModelClassNameMixin):
     user_about = models.CharField(max_length=1024, blank=True)
@@ -21,5 +6,5 @@ class User(AbstractUser, ModelClassNameMixin):
     blocked_time = models.DateTimeField(null=True, blank=True)
     email = models.EmailField(blank=True, unique=True)
     likes = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='user_likes')
-    is_banned = models.BooleanField(default=False)
-    # objects = UserManager()
+    model_name = models.CharField(max_length=12, default='user')
+
