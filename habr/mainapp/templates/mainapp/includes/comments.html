@@ -76,7 +76,7 @@
                                     <a class="me-3 ml-5" href="#">
                                         <img
                                                 class="rounded-circle shadow-1-strong"
-                                                src="{% if comment.author.avatar_link %} {{ comment.author.avatar_link.url }} {% endif %}"
+                                                src="{% if child_comment.author.avatar_link %} {{ child_comment.author.avatar_link.url }} {% endif %}"
                                                 alt="avatar"
                                                 width="65"
                                                 height="65"
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <form method="POST" action="{% url 'mainapp:comment' article.pk %}">
+                <form class="u-align-center" method="POST" action="{% url 'mainapp:comment' article.pk %}">
                     {% csrf_token %}
                     <p></p>
                     {{ form }}

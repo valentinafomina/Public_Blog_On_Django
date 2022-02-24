@@ -10,85 +10,100 @@
         статью</a>
 </div>
 <div class="u-align-center">
-{% if user_detail.is_banned %}
-{% if not request.user == user_detail %}
-<h4 class="mt-4"> Юзер заблокирован </h4>
-{% elif request.user == user_detail %}
-<h4 class="mt-4"> Вы заблокированы </h4>
-<a > Это значит, вы не можете оставлять комментарии и публиковать статьи в течение 2 недель </a>
-{% endif %}
-{% endif %}
+    {% if user_detail.is_banned %}
+    {% if not request.user == user_detail %}
+    <h4 class="mt-4"> Юзер заблокирован </h4>
+    {% elif request.user == user_detail %}
+    <h4 class="mt-4"> Вы заблокированы </h4>
+    <a > Это значит, вы не можете оставлять комментарии и публиковать статьи в течение 2 недель </a>
+    {% endif %}
+    {% endif %}
 
-<h3 class="mt-4">Личная информация </h3>
-<div class="card mb-4">
-    <div class="card-body">
-        <img height="150" src="{% if user_detail.avatar_link %} {{ user_detail.avatar_link.url }} {% endif %}" alt="">
-        <br>Никнейм: {{ user_detail.username }}
-        <br>Имя: {{ user_detail.first_name }}
-        <br>Фамилия: {{ user_detail.last_name }}
-        <br>Адрес эл. почты: {{ user_detail.email }}
-        <br>Обо мне:
-        <br>{{user_detail.user_about}}
+    <h3 class="mt-4">Личная информация </h3>
+    <div class="card mb-4">
+        <div class="card-body">
+            <img height="150" src="{% if user_detail.avatar_link %} {{ user_detail.avatar_link.url }} {% endif %}" alt="">
+            <br>Никнейм: {{ user_detail.username }}
+            <br>Имя: {{ user_detail.first_name }}
+            <br>Фамилия: {{ user_detail.last_name }}
+            <br>Адрес эл. почты: {{ user_detail.email }}
+            <br>Обо мне:
+            <br>{{user_detail.user_about}}
+        </div>
+        {% if edit_visible == 'True' %}
+        <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
+        {% endif %}
     </div>
-    {% if edit_visible == 'True' %}
-    <div class="btn btn-link"><a href="{% url 'auth:users_update' %}">Редактировать</a></div>
-    {% endif %}
-</div>
 
-<div class="articles">
-    {% for articles in articles %}
-    {% if request.user.pk == article.author.pk or user.is_staff %}
+    <div class="articles">
+        {% for articles in articles %}
+        {% if request.user.pk == article.author.pk or user.is_staff %}
 
 
-    <h3>{{article.title}}</h3>
-    <p>article.tags</p>
+        <h3>{{article.title}}</h3>
+        <p>article.tags</p>
 
-    {% endif %}
-    {% endfor %}
-</div>
-<div >
-    <b>Рейтинг</b>
-    <ul>
-        <li class="l">Здесь кол-во лайкосиков на статью</li>&nbsp;
-    </ul>
-</div>
-
-
-<div >
+        {% endif %}
+        {% endfor %}
+    </div>
     <div >
-        <b>Название неопубликованной статьи</b>
+        <b>Рейтинг</b>
         <ul>
-            <li class="l"><a href="#">Здесь название статьи</a></li>
-            {% if not user_detail.is_staff and not user_detail.is_banned %}
-            <a href="#">ОПУБЛИКОВАТЬ </a>
-            {% endif %}
-            /
-            <a href="#">РЕДАКТИРОВАТЬ</a>
+            <li class="l">{{ rating }}</li>&nbsp;
         </ul>
     </div>
-</div>
-
-<div class="articles">
-    {% if request.user.pk == article.user.pk or user.is_staff %}
-    {% for user.articles in articles %}
-
-    <h3>{{article.title}}</h3>
-    <p>article.tags</p>
-
-    {% endfor %}
-    {% endif %}
-</div>
 
 
-<div>
-    {% if request.user.is_superuser %}
-    {% if not user_detail.is_staff and not user_detail.is_banned %}
-    <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Назначить модератором</a></div>
-    {% elif user_detail.is_staff and not user_detail.is_superuser %}
-    <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Забрать права модератора</a>
+    <div class="row">
+        <div class="col">
+            <b>Ваши статьи</b>
+            {% for article in published_articles %}
+            <ul>
+                <li class="l"><a href="{% url 'mainapp:article' article.pk %}"> {{article.title}} </a></li>
+                <!--            {% if not user_detail.is_banned %}-->
+                <!--            <a href="#">ОПУБЛИКОВАТЬ </a>-->
+                <!--            {% endif %}-->
+                <!--            /-->
+                <!--            <a href="#">РЕДАКТИРОВАТЬ</a>-->
+            </ul>
+            {% endfor %}
+        </div>
+        <div class="col">
+            <b>Ваши черновики</b>
+            {% for article in draft_articles %}
+            <ul>
+                <li class="l"><a href="{% url 'mainapp:article' article.pk %}"> {{article.title}} </a></li>
+                <!--            {% if not user_detail.is_banned %}-->
+                <!--            <a href="#">ОПУБЛИКОВАТЬ </a>-->
+                <!--            {% endif %}-->
+                <!--            /-->
+                <!--            <a href="#">РЕДАКТИРОВАТЬ</a>-->
+            </ul>
+            {% endfor %}
+        </div>
     </div>
-    {% endif %}
-    {% endif %}
-</div>
+
+    <div class="articles">
+        {% if request.user.pk == article.user.pk or user.is_staff %}
+        {% for user.articles in articles %}
+
+        <h3>{{article.title}}</h3>
+        <p>article.tags</p>
+
+        {% endfor %}
+        {% endif %}
+    </div>
+
+
+    <div>
+        {% if request.user.is_superuser %}
+        {% if not user_detail.is_staff and not user_detail.is_banned %}
+        <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Назначить модератором</a></div>
+        {% elif user_detail.is_staff and not user_detail.is_superuser %}
+        <div class="small"><a href="{% url 'moderation:change_moderator_status' user.pk %}">Забрать права модератора</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

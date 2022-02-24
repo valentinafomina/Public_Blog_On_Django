@@ -1,5 +1,6 @@
 from pyexpat import model
 from django.contrib import auth
+from django.db.models import Count
 from django.shortcuts import HttpResponseRedirect, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.detail import DetailView
@@ -9,6 +10,7 @@ from django.contrib.auth.views import LoginView
 
 from .models import User
 from .forms import UserRegisterForm, UserProfileForm, UserLoginForm
+from mainapp.models import Article, Comment
 
 
 # CRUD - Create Read Update Delete
@@ -24,6 +26,10 @@ class UserDetailView(DetailView):
         content['title'] = 'Профиль'
         content['user'] = self.request.user
         content['user_detail'] = self.get_object()
+        content['rating'] = self.get_rating()
+        content['published_articles'] = Article.objects.filter(author__id=self.get_object().id, is_published=True)
+        content['draft_articles'] = Article.objects.filter(
+            author__id=self.get_object().id, is_published=False)
 
         if self.request.user.is_authenticated:
             content['user_check'] = User.objects.get(username=self.request.user)
@@ -34,6 +40,13 @@ class UserDetailView(DetailView):
         else:
             content['edit_visible'] = 'False'
         return content
+
+    def get_rating(self):
+        articles_likes = Article.objects.filter(author__id=self.get_object().id).count()
+        comments_likes = Comment.objects.filter(author__id=self.get_object().id).count()
+        user_likes = self.get_object().likes.count()
+        rating = articles_likes + comments_likes + user_likes
+        return rating
 
 
 class UserCreateView(RegistrationView):
