@@ -35,7 +35,7 @@
             </td>
             <td class="col">{{object.banned_on }}</td>
             <td class="col">
-                <form method="POST" action="{% url 'mod:unban' pk=object.pk %}">
+                <form method="POST" action="{% url 'mod:unban' model='article' pk=object.pk %}">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     <button class="btn btn-link" type="submit">
@@ -60,7 +60,7 @@
             </td>
             <td>{{object.banned_on }}</td>
             <td>
-                <form method="POST" action="{% url 'mod:unban' pk=object.pk %}">
+                <form method="POST" action="{% url 'mod:unban' model='comment' pk=object.pk %}">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     <button class="btn btn-link" type="submit">

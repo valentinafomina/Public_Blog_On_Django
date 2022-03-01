@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<secton class="u-align-center">
 <h1 class="mt-4" xmlns="http://www.w3.org/1999/html">Редактирование пользователя | {{ user.username }}</h1>
 <div class="card-body " style="width: 50%; margin-left: 25%;">
     <form action="{% url 'auth:users_update' %}" method="post" enctype="multipart/form-data">
@@ -55,4 +56,5 @@
 </div>
 
 </div>
+    </secton>
 {% endblock %}

@@ -37,7 +37,7 @@ def get_top10_users():
 class ArticlesView(ListView):
     model = Article
     ordering = '-created_date'
-    paginate_by = 100
+    paginate_by = 5
     template_name = 'mainapp/articles.html'
     context_object_name = 'articles'
     extra_context = {

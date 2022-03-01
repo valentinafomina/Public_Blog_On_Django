@@ -42,52 +42,65 @@ class Ban(View):
         models = {
             'article': Article,
             'comment': Comment,
+            'user': User
         }
 
-        _object = models[model].objects.get(pk=pk)
-        object_author = _object.author
+        if model == 'user':
+            if request.user.is_staff:
+                _object = User.objects.get(pk=pk)
+                _object.blocked_time = datetime.now()
+                _object.save()
 
-        if not _object.is_banned and request.user.is_staff:
+        elif model is not 'user':
+            _object = models[model].objects.get(pk=pk)
+            object_author = _object.author
 
-            _object.is_banned = True
-            _object.save()
+            if not _object.is_banned and request.user.is_staff:
 
-            object_author.blocked_time = datetime.now()
-            object_author.save()
+                _object.is_banned = True
+                _object.save()
 
-            if model == 'article':
-                banned_article = BannedObjects.create(object_pk=_object,
-                                                      user=request.user)
-                banned_article.save()
+                object_author.blocked_time = datetime.now()
+                object_author.save()
 
-            elif model == 'comment':
-                banned_comment = BannedObjects.create(object_pk=_object,
-                                                      user=request.user)
-                banned_comment.save()
+                if model == 'article':
+                    banned_article = BannedObjects.create(object_pk=_object,
+                                                          user=request.user)
+                    banned_article.save()
 
-            next = request.POST.get('next', '/')
-            return HttpResponseRedirect(next)
+                elif model == 'comment':
+                    banned_comment = BannedObjects.create(object_pk=_object,
+                                                          user=request.user)
+                    banned_comment.save()
+
+
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
 
 
 class Unban(View):
-    def post(self, request, pk, *args, **kwargs):
-        if request.user.is_staff:
-            _object = BannedObjects.objects.get(id=pk)
+    def post(self, request, model, pk, *args, **kwargs):
+        if model == 'user':
+            if request.user.is_staff:
+                _object = User.objects.get(id=pk)
+                _object.blocked_time = None
+                _object.save()
 
-            if _object.banned_article is not None:
-                article = Article.objects.get(id=_object.banned_article_id)
-                article.is_banned = False
-                article.save()
+        elif model is not 'user':
+            if request.user.is_staff:
+                _object = BannedObjects.objects.get(id=pk)
+                if _object.banned_article is not None:
+                    article = Article.objects.get(id=_object.banned_article_id)
+                    article.is_banned = False
+                    article.save()
+                elif _object.banned_comment is not None:
+                    comment = Comment.objects.get(id=_object.banned_comment_id)
+                    comment.is_banned = False
+                    comment.save()
+                _object.delete()
 
-            elif _object.banned_comment is not None:
-                comment = Comment.objects.get(id=_object.banned_comment_id)
-                comment.is_banned = False
-                comment.save()
-
-            _object.delete()
-
-            next = request.POST.get('next', '/')
-            return HttpResponseRedirect(next)
+        next = request.POST.get('next', '/')
+        return HttpResponseRedirect(next)
 
 
 def mute_report(request, pk):
