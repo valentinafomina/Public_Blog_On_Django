@@ -27,7 +27,7 @@
                                         <div>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <p class="mb-1">
-                                                    <a class="link-dark" href="{% url 'auth:users_detail' comment.author.pk %}">{{ comment.author }} </a>
+                                                    <a class="link-dark" href="{% url 'auth:users_detail' comment.author_id %}">{{ comment.author }} </a>
                                                     <span class="small text-align left">написал {{ comment.created_at|date:"d.m.Y" }} {{ comment.created_at|time:"H:i" }} </span>
                                                 </p>
 
@@ -53,6 +53,7 @@
                                     {% endif %}
 
                                 </div>
+                                {% if request.user.is_authenticated %}
                                 <div align="right">
                                     <button class="btn btn-link">
                                         <i class="fas fa-reply fa-xs" onclick="commentReplyToggle('{{ comment.pk }}')">
@@ -72,7 +73,7 @@
                                     </div>
                                 </div>
 
-
+                                {% endif %}
                                 {% for child_comment in comment.children %}
                                 <div class="d-flex flex-end mt-4 ms-5">
                                     <a class="me-3 ml-5" href="#">
@@ -130,7 +131,7 @@
                         </div>
                     </div>
                 </div>
-
+                {% if request.user.is_authenticated %}
                 {% if article.is_published %}
                 <form class="u-align-center" method="POST" action="{% url 'mainapp:comment' article.pk %}">
                     {% csrf_token %}
@@ -138,6 +139,7 @@
                     {{ form }}
                     <input type="submit" value="Отправить"/>
                 </form>
+                {% endif %}
                 {% endif %}
                 <br>
                 {% if not request.user.is_authenticated %}

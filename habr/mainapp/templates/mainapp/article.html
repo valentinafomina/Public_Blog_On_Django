@@ -5,32 +5,6 @@
 
 <div class="container my-5 py-5">
 
-  <!-- Nav buttons -->
-  <div class="u-clearfix u-section-1 ">
-    <a href="/" data-page-id="752105316"
-       class="u-border-2 u-border-black u-btn u-button-style u-hover-black btn-outline-dark u-btn-1">
-      Вернуться назад</a>
-
-    {% if request.user.is_authenticated %}
-      {% if request.user.pk == article.author.pk %}
-        {% if article.is_published %}
-          <form method="post" action="{% url 'mainapp:delete_article' article.pk %}"
-                onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
-            <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Снять с
-              публикации
-            </button>
-          </form>
-        {% endif %}
-          <form method="post" action="{% url 'mainapp:update_article' article.pk %}"
-                onclick="return confirm('Вы действительно хотите редактировать эту статью?')"> {% csrf_token %}
-            <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Редактировать статью
-            </button>
-          </form>
-      {% endif %}
-    {% endif %}
-  </div>
-
-
   <div class="row d-flex justify-content-center">
     <div class="card px-3 pt-3" style="max-width: 60rem">
       <!-- Статья -->
@@ -50,7 +24,7 @@
           </div>
 
           <div class="col-4 text-center">
-            <a href="{% url 'auth:users_detail' article.author.pk%}" class="text-info">
+            <a href="{% url 'auth:users_detail' article.author_id %}" class="text-info">
               <u> {{ article.author }}</u>
             </a>
           </div>
@@ -122,5 +96,31 @@
   {% include "mainapp/includes/comments.html" %}
 
   {% include 'mainapp/includes/inc_carousel.html' %}
+
+  <!-- Nav buttons -->
+  <div class="u-clearfix u-section-1 ">
+    <a href="/" data-page-id="752105316"
+       class="u-border-2 u-border-black u-btn u-button-style u-hover-black btn-outline-dark u-btn-1">
+      Вернуться назад</a>
+
+    {% if request.user.is_authenticated %}
+      {% if request.user.pk == article.author.pk %}
+        {% if article.is_published %}
+          <form method="post" action="{% url 'mainapp:delete_article' article.pk %}"
+                onclick="return confirm('Вы действительно хотите снять с публикации эту статью?')"> {% csrf_token %}
+            <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Снять с
+              публикации
+            </button>
+          </form>
+        {% endif %}
+          <form method="post" action="{% url 'mainapp:update_article' article.pk %}"
+                onclick="return confirm('Вы действительно хотите редактировать эту статью?')"> {% csrf_token %}
+            <button class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-btn-2">Редактировать статью
+            </button>
+          </form>
+      {% endif %}
+    {% endif %}
+  </div>
+<!-- Nav buttons -->
 
   {% endblock %}

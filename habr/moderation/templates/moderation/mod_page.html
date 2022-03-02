@@ -78,15 +78,15 @@
 
 <div class="u-align-center">
    <h3> {{title5}} </h3>
-    {% for object in reported_articles %}
+    {% for report in reported_articles %}
     <div>
         <a>
             <li>
-                На статью    <a href="{% url 'mainapp:article' object.reported_article.pk %}" class="link-secondary">
-                {{ object.reported_article }}</a>
+                На статью    <a href="{% url 'mainapp:article' report.reported_article.pk %}" class="link-secondary">
+                {{ report.reported_article }}</a>
                 | пожаловался юзер:
-                <a href="{% url 'auth:users_detail' object.reported_by.id %}" >{{ object.reported_by }}</a>
-                | {{object.reported_on }}
+                <a href="{% url 'auth:users_detail' report.reported_by_id %}" class="link-secondary">{{ report.reported_by }}</a>
+                | {{report.reported_on }}
             </li>
         </a>
     </div>
