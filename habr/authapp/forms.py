@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from .models import User
 
+
 class UserRegisterForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Введите имя пользователя'}))
@@ -53,7 +54,6 @@ class UserRegisterForm(UserCreationForm):
                 "Пароль должен содержать строчные латинские буквы в верхнем и нижнем регистрах."
             )
         
-
 
 class UserProfileForm(UserChangeForm):
     username = forms.CharField(widget=forms.TextInput())

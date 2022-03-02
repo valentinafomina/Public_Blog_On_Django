@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'searchapp',
     'adminapp',
     'moderation',
-    'userprofile',
     'habr',
     'django_registration',
 ]
@@ -122,12 +121,13 @@ USE_TZ = True
 
 # для отправки кода активации
 AUTH_USER_EMAIL_UNIQUE = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'info@google.ru'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'badrhymes@yandex.ru'
+EMAIL_HOST_PASSWORD = 'Ybrjkfif1'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'badrhymes@yandex.ru'
 
 #Days for activation account by email 
 ACCOUNT_ACTIVATION_DAYS = 3

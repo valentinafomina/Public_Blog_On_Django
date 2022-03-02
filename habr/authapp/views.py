@@ -74,6 +74,7 @@ class UserCreateView(RegistrationView):
         return reverse_lazy('main:articles')
 """
 
+
 class UserUpdateView(UpdateView):
     model = User
     template_name = 'authapp/users-update-delete.html'

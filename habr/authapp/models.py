@@ -28,3 +28,4 @@ class User(AbstractUser, ModelClassNameMixin):
                 return False
         else:
             return False
+

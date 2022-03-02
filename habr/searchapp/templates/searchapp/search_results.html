@@ -1,57 +1,59 @@
 {% extends 'mainapp/base.html' %}
-
+{% block title %} Результаты поиска {% endblock %}
 {% block content %}
     <h1>результаты поиска по «{{ search_name }}»</h1>
     {% if object_list %}
-        {% for object in object_list %}
-            {% if object.title %}
-                <div class="card col-lg-6 offset-lg-3 mb-3">
-                    <div class="card-body">
-                        <a>
-                          <h2 class="card-title my-3"> {{ object.title }} </h2>
-                        </a>
-                        <div class="text-muted mb-3">
-                            <div>
-                                <span>created: {{ object.created_date|date:"N j Y" }} |</span>
-                                <span>Автор: {{ object.user }}</span>
-                                <span>Категория: {{ object.category }}</span>
+        {if not object.is_banned %}
+                {% for object in object_list %}
+                    {% if object.title %}
+                        <div class="card col-lg-6 offset-lg-3 mb-3">
+                            <div class="card-body">
+                                <a>
+                                  <h2 class="card-title my-3"> {{ object.title }} </h2>
+                                </a>
+                                <div class="text-muted mb-3">
+                                    <div>
+                                        <span>created: {{ object.created_date|date:"N j Y" }} |</span>
+                                        <span>Автор: {{ object.user }}</span>
+                                        <span>Категория: {{ object.category }}</span>
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ object.article_text|truncatewords:20 }}</p>
+                                <a class='btn btn-light' href="{% url 'mainapp:article' object.id %}">Read more ...</a>
                             </div>
                         </div>
-                        <p class="card-text">{{ object.article_text|truncatewords:20 }}</p>
-                        <a class='btn btn-light' href="{% url 'mainapp:article' object.id %}">Read more ...</a>
-                    </div>
-                </div>
-            {% elif object.name %}
-                <div class="card col-lg-6 offset-lg-3 mb-3">
-                    <div class="card-body">
-                        <a>
-                          <h2 class="card-title my-3"> Категория {{ object.name }} </h2>
-                        </a>
-                        <p class="card-text">{{ object.description|truncatewords:20 }}</p>
-                        <a class='btn btn-light' href="{% url 'mainapp:category' object.id %}">Перейти на страницу категории</a>
-                    </div>
-                </div>
+                    {% elif object.name %}
+                        <div class="card col-lg-6 offset-lg-3 mb-3">
+                            <div class="card-body">
+                                <a>
+                                  <h2 class="card-title my-3"> Категория {{ object.name }} </h2>
+                                </a>
+                                <p class="card-text">{{ object.description|truncatewords:20 }}</p>
+                                <a class='btn btn-light' href="{% url 'mainapp:category' object.id %}">Перейти на страницу категории</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card col-lg-6 offset-lg-3 mb-3">
+                            <div class="card-body">
+                                <a>
+                                  <h2 class="card-title my-3"> {{ object.username }} </h2>
+                                </a>
+                                <div class="text-muted mb-3">
+                                    <span><img height="150" src="{% if object.avatar_link %} {{ object.avatar_link.url }} {% endif %}" alt=""></span>
+                                    <div>
+                                        <span>Имя: {{ object.first_name }} |</span>
+                                        <span>Фамилия: {{ object.last_name }}</span>
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ object.user_about|truncatewords:20 }}</p>
+                                <a class='btn btn-light' href="{% url 'auth:users_detail' object.id %}">Перейти на страницу профиля</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% else %}
-                <div class="card col-lg-6 offset-lg-3 mb-3">
-                    <div class="card-body">
-                        <a>
-                          <h2 class="card-title my-3"> {{ object.username }} </h2>
-                        </a>
-                        <div class="text-muted mb-3">
-                            <span><img height="150" src="{% if object.avatar_link %} {{ object.avatar_link.url }} {% endif %}" alt=""></span>
-                            <div>
-                                <span>Имя: {{ object.first_name }} |</span>
-                                <span>Фамилия: {{ object.last_name }}</span>
-                            </div>
-                        </div>
-                        <p class="card-text">{{ object.user_about|truncatewords:20 }}</p>
-                        <a class='btn btn-light' href="{% url 'auth:users_detail' object.id %}">Перейти на страницу профиля</a>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>Не найдено ничего по вашему запросу<br>Попробуйте повторить запрос с другой формулировкой</p>
+                <p>Не найдено ничего по вашему запросу<br>Попробуйте повторить запрос с другой формулировкой</p>
+        {% endif %}
     {% endif %}
 
     <!-- Pagination -->

@@ -6,7 +6,6 @@ from authapp.models import User
 
 
 class BannedObjects(models.Model):
-
     banned_by = models.ForeignKey(User, on_delete=models.CASCADE)
     banned_on = models.DateTimeField(blank=True, null=True)
     banned_article = models.ForeignKey(Article, on_delete=models.CASCADE,

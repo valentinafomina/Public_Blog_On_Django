@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-grey-80 u-header u-sticky u-sticky-9aa7 u-header"
@@ -28,7 +29,15 @@
             </div>
         </nav>
         <div class="u-custom-menu u-nav-container">
+            {% if user.is_authenticated %}
             <ul class="u-nav u-spacing-20 u-unstyled u-nav-1">
+                {% endif %}
+                {% if not user.is_authenticated %}
+            <ul class="u-nav u-spacing-20 u-unstyled u-nav-1">
+                {% endif %}
+                {% if user.is_authenticated and not user.is_superuser %}
+            <ul class="u-nav u-spacing-20 u-unstyled u-nav-19">
+                {% endif %}
                 <li class="u-nav-item">
                     <a class="u-button-style u-nav-link u-text-white"
                        href="/" style="padding: 10px;">
@@ -96,6 +105,12 @@
                     </a>
                 </li>
                 {% endif %}
+                <li class="u-nav-item">
+                    <a
+                            class="u-button-style u-nav-link u-text-active-palette-1-base u-text-white u-text-hover-palette-2-base"
+                            href="/help" style="padding: 10px;">Помощь
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

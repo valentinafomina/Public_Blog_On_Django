@@ -1,6 +1,6 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
-
+{% block title %} Удаление статьи {% endblock %}
 {% block content %}
 <form method="post">
     {% csrf_token %}
