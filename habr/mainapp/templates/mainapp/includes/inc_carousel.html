@@ -16,7 +16,7 @@
                                 <!--blog_post_header_content-->{{article.title}}<!--/blog_post_header_content--></a>
                         </h4><!--/blog_post_header-->
                         <a class="u-post-header-link" href="/article/{{ article.pk }}"><!--blog_post_image-->
-                            <img src="{% static 'images/{{ article.pk }}.jpeg' %}" alt=""
+                            <img src="{% if article.image %} {{ article.image.url }} {% else %} https://mdbcdn.b-cdn.net/img/new/slides/080.webp {% endif %}" alt=""
                                  class="u-blog-control u-expanded-width u-image u-image-default u-image-1">
                             <!--/blog_post_image-->
                         </a><!--blog_post_content-->

@@ -12,7 +12,7 @@
 </section>
 
 
-<form method="post" id="FormOne">
+<form method="post" id="FormOne" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="card col-lg-6 offset-lg-3 mb-3">
         {% for field in form %}

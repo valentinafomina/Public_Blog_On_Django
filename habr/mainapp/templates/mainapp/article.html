@@ -29,8 +29,7 @@
       <div>
         <!-- Фото -->
         <div class="bg-image hover-overlay shadow-1-strong ripple rounded-5 mb-4"
-             data-mdb-ripple-color="light">
-          <img src="https://mdbcdn.b-cdn.net/img/new/fluid/city/113.webp" class="img-fluid" />
+             data-mdb-ripple-color="light"><img src="{% if article.image %} {{ article.image.url }} {% else %} https://mdbcdn.b-cdn.net/img/new/slides/080.webp {% endif %}" alt="Article Image" class="img-fluid" width="900>
           <a href="#!">
             <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
           </a>

@@ -67,6 +67,8 @@ class Article(models.Model, ModelClassNameMixin):
                                  on_delete=models.CASCADE)
     likes = models.ManyToManyField(User, blank=True, related_name='article_likes')
     tags = models.ManyToManyField('Tag', blank=True, related_name='tagged_articles')
+    image = models.ImageField(upload_to='article_photos', blank=True,
+                              null=True)
 
     def publish(self):
         self.published_date = timezone.now()
