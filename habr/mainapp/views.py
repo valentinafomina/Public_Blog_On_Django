@@ -189,6 +189,9 @@ def about_us(request):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CommentView(LoginRequiredMixin, BanTestMixin, View):
+    login_url = '/auth/login/'
+    permission_denied_message = 'вы не авторизованны'
+
     def post(self, request, pk, *args, **kwargs):
         form = CommentForm(request.POST)
         article = Article.objects.get(pk=pk)
@@ -209,7 +212,7 @@ class CommentView(LoginRequiredMixin, BanTestMixin, View):
             if '@moderator' in text:
                 report = Report.create(object_pk=article, user=request.user)
                 report.save()
-            return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article.pk}))
+        return HttpResponseRedirect(reverse('mainapp:article', kwargs={'pk': article.pk}))
 
 
 @method_decorator(csrf_exempt, name='dispatch')

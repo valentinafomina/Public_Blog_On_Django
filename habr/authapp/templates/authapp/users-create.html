@@ -35,6 +35,7 @@
 
 {% if next %}
 <form action="{% url 'auth:users_create' %}?next={{next}}" method="post">
+    {% csrf_token %}
     {%else%}
     <form action="{% url 'auth:users_create' %}" method="post" enctype="multipart/form-data">
         {% endif %}
