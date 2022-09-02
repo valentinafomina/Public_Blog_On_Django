@@ -123,11 +123,11 @@ USE_TZ = True
 AUTH_USER_EMAIL_UNIQUE = True
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'badrhymes@yandex.ru'
-EMAIL_HOST_PASSWORD = 'Ybrjkfif1'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-DEFAULT_FROM_EMAIL = 'badrhymes@yandex.ru'
+DEFAULT_FROM_EMAIL = ''
 
 #Days for activation account by email 
 ACCOUNT_ACTIVATION_DAYS = 3
